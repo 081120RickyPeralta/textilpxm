@@ -389,57 +389,59 @@
                         </div>
                     </div>
                     <div class="col-lg-7">
-                        <form class="order-form" id="orderForm" method="POST" action="<?php echo BASE_URL; ?>/contact">
+                        <form class="order-form" id="homeOrderForm" onsubmit="return enviarWhatsAppHome(event)">
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <label class="form-label">Nombre Completo *</label>
-                                    <input type="text" class="form-control" name="name" placeholder="Tu nombre" required>
+                                    <input type="text" class="form-control" id="homeInputName" name="name" placeholder="Tu nombre" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Correo Electrónico *</label>
-                                    <input type="email" class="form-control" name="email" placeholder="correo@ejemplo.com" required>
+                                    <input type="email" class="form-control" id="homeInputEmail" name="email" placeholder="correo@ejemplo.com" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Teléfono / WhatsApp *</label>
-                                    <input type="tel" class="form-control" name="phone" placeholder="+52 954 123 4567" required>
+                                    <input type="tel" class="form-control" id="homeInputPhone" name="phone" placeholder="+52 954 123 4567" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Prenda de Interés *</label>
-                                    <select class="form-select" name="product" required>
+                                    <select class="form-select" id="homeProductSelect" name="product" required>
                                         <option value="" selected disabled>Selecciona una opción</option>
                                         <?php if (!empty($allProducts)): ?>
                                             <?php foreach ($allProducts as $prod): ?>
-                                                <option value="<?php echo $prod['id']; ?>">
+                                                <option value="<?php echo $prod['id']; ?>"
+                                                        data-nombre="<?php echo htmlspecialchars($prod['nombre']); ?>"
+                                                        data-precio="<?php echo number_format($prod['precio'], 2); ?>">
                                                     <?php echo htmlspecialchars($prod['nombre']); ?> - $<?php echo number_format($prod['precio'], 2); ?> MXN
                                                 </option>
                                             <?php endforeach; ?>
                                         <?php endif; ?>
-                                        <option value="otro">Otro / Personalizado</option>
+                                        <option value="otro" data-nombre="Producto Personalizado" data-precio="Por definir">Otro / Personalizado</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Talla</label>
-                                    <select class="form-select" name="size">
+                                    <select class="form-select" id="homeInputSize" name="size">
                                         <option value="" selected disabled>Selecciona tu talla</option>
-                                        <option value="xs">XS - Extra Chica</option>
-                                        <option value="s">S - Chica</option>
-                                        <option value="m">M - Mediana</option>
-                                        <option value="l">L - Grande</option>
-                                        <option value="xl">XL - Extra Grande</option>
-                                        <option value="unica">Talla Única</option>
+                                        <option value="XS">XS - Extra Chica</option>
+                                        <option value="S">S - Chica</option>
+                                        <option value="M">M - Mediana</option>
+                                        <option value="L">L - Grande</option>
+                                        <option value="XL">XL - Extra Grande</option>
+                                        <option value="Talla Única">Talla Única</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Estado / Ciudad</label>
-                                    <input type="text" class="form-control" name="city" placeholder="Ej: CDMX, Guadalajara">
+                                    <input type="text" class="form-control" id="homeInputCity" name="city" placeholder="Ej: CDMX, Guadalajara">
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Mensaje o Especificaciones</label>
-                                    <textarea class="form-control" name="message" rows="3" placeholder="Cuéntanos si tienes alguna solicitud especial, colores preferidos, etc."></textarea>
+                                    <textarea class="form-control" id="homeInputMessage" name="message" rows="3" placeholder="Cuéntanos si tienes alguna solicitud especial, colores preferidos, etc."></textarea>
                                 </div>
                                 <div class="col-12 mt-4">
                                     <button type="submit" class="btn btn-primary btn-submit">
-                                        <i class="bi bi-send me-2"></i>Enviar Pedido
+                                        <i class="bi bi-whatsapp me-2"></i>Solicitar Pedido
                                     </button>
                                 </div>
                             </div>
@@ -452,6 +454,9 @@
 </section>
 
     <script>
+        // Número de WhatsApp del administrador (sin el +)
+        const WHATSAPP_ADMIN = '529541364103';
+        
         // Marcar el body para aplicar estilos específicos del home
         (function() {
             if (document.body) {
@@ -462,6 +467,67 @@
                 });
             }
         })();
+        
+        // Función para enviar pedido por WhatsApp desde el home
+        function enviarWhatsAppHome(event) {
+            event.preventDefault();
+            
+            // Obtener valores del formulario
+            const nombre = document.getElementById('homeInputName').value.trim();
+            const email = document.getElementById('homeInputEmail').value.trim();
+            const telefono = document.getElementById('homeInputPhone').value.trim();
+            const ciudad = document.getElementById('homeInputCity').value.trim();
+            const mensaje = document.getElementById('homeInputMessage').value.trim();
+            const tallaSelect = document.getElementById('homeInputSize');
+            const talla = tallaSelect.options[tallaSelect.selectedIndex]?.value || 'No especificada';
+            
+            // Obtener producto seleccionado
+            const productSelect = document.getElementById('homeProductSelect');
+            const selectedOption = productSelect.options[productSelect.selectedIndex];
+            const productoNombre = selectedOption?.dataset.nombre || 'No especificado';
+            const productoPrecio = selectedOption?.dataset.precio || 'Por definir';
+            
+            // Validar campos requeridos
+            if (!nombre || !email || !telefono || !productSelect.value) {
+                alert('Por favor completa todos los campos requeridos');
+                return false;
+            }
+            
+            // Construir mensaje de WhatsApp
+            let whatsappMessage = `🛒 *NUEVO PEDIDO - OAXACA TEXTILES*\n\n`;
+            whatsappMessage += `━━━━━━━━━━━━━━━━━━━━\n`;
+            whatsappMessage += `📦 *PRODUCTO*\n`;
+            whatsappMessage += `• Artículo: ${productoNombre}\n`;
+            whatsappMessage += `• Precio: $${productoPrecio} MXN\n`;
+            whatsappMessage += `• Talla: ${talla}\n`;
+            whatsappMessage += `━━━━━━━━━━━━━━━━━━━━\n`;
+            whatsappMessage += `👤 *DATOS DEL CLIENTE*\n`;
+            whatsappMessage += `• Nombre: ${nombre}\n`;
+            whatsappMessage += `• Teléfono: ${telefono}\n`;
+            whatsappMessage += `• Email: ${email}\n`;
+            if (ciudad) {
+                whatsappMessage += `• Ciudad: ${ciudad}\n`;
+            }
+            if (mensaje) {
+                whatsappMessage += `━━━━━━━━━━━━━━━━━━━━\n`;
+                whatsappMessage += `💬 *MENSAJE*\n`;
+                whatsappMessage += `${mensaje}\n`;
+            }
+            whatsappMessage += `━━━━━━━━━━━━━━━━━━━━\n`;
+            whatsappMessage += `📅 Fecha: ${new Date().toLocaleDateString('es-MX')}\n`;
+            whatsappMessage += `🌐 Enviado desde: oaxacatextiles.mx`;
+            
+            // Codificar mensaje para URL
+            const encodedMessage = encodeURIComponent(whatsappMessage);
+            
+            // Crear URL de WhatsApp
+            const whatsappUrl = `https://wa.me/${WHATSAPP_ADMIN}?text=${encodedMessage}`;
+            
+            // Abrir WhatsApp en nueva ventana
+            window.open(whatsappUrl, '_blank');
+            
+            return false;
+        }
         
         // Smooth scroll for anchor links
         document.addEventListener('DOMContentLoaded', function() {
@@ -476,12 +542,6 @@
                         });
                     }
                 });
-            });
-            
-            // Manejar envío del formulario de pedidos
-            document.getElementById('orderForm')?.addEventListener('submit', function(e) {
-                // El formulario se enviará normalmente al servidor
-                // No necesitamos prevenir el comportamiento por defecto
             });
         });
     </script>
