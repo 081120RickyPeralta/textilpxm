@@ -43,8 +43,8 @@
             <a class="navbar-brand" href="<?php echo BASE_URL; ?>" style="font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 600; color: #3d3529 !important; letter-spacing: 0.05em;">
                 OAXACA TEXTILES
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" style="border-color: #3d3529;">
-                <span class="navbar-toggler-icon" style="background-image: url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2861, 53, 41, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e\");"></span>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" style="border: 2px solid #3d3529; padding: 0.5rem 0.75rem;">
+                <i class="bi bi-list" style="font-size: 1.5rem; color: #3d3529;"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto">
