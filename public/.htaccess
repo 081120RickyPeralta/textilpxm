@@ -1,0 +1,32 @@
+# Configuración básica del servidor web
+# Configuración para URLs amigables
+
+# Activar el motor de reescritura
+RewriteEngine On
+
+# Directorio base para reescritura (ajustar según tu configuración)
+RewriteBase /
+
+# Prevenir acceso a archivos sensibles
+RewriteRule ^config/ - [F,L]
+RewriteRule ^\. - [F,L]
+RewriteRule ^composer\.json$ - [F,L]
+RewriteRule ^composer\.lock$ - [F,L]
+RewriteRule \.git - [F,L]
+RewriteRule \.env - [F,L]
+
+# Redirigir todas las solicitudes a index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?path=$1 [L,QSA]
+
+# Opciones de seguridad
+Options -Indexes
+ServerSignature Off
+
+# Cabeceras de seguridad
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>

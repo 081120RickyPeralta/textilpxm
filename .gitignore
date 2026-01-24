@@ -1,0 +1,51 @@
+# Configuración del servidor
+public/.htaccess.backup
+
+# Archivos de configuración con contraseñas
+config/Config.local.php
+config/.env
+
+# Carpetas generadas
+vendor/
+node_modules/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+*.log
+
+# Entornos locales
+*.local
+*.local.sql
+
+# Editor archivos
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Archivos temporales
+*.tmp
+*.temp
+
+# Caché
+cache/
+tmp/
+temp/
+
+# Sesiones
+sessions/
+
+# Archivos de backup
+*.backup
+*.bak
+*.old
+
+# Documentación (opcional - descomentar para ignorar si prefieres no subir doc)
+# README.md
+# docs/
+
+# Tests
+tests/
+coverage/
