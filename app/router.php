@@ -17,24 +17,45 @@ class Router {
         $url = $this->getUrl();
 
         // Procesar la URI
-        if (!empty($url)) {
-            $url = $this->processUrl($url);
-            
-            // Establecer el controlador (se convierte a formato PascalCase con primera letra mayúscula)
-            if (!empty($url[0])) {
-                $this->controllerName = ucfirst($url[0]) . 'Controller';
-                unset($url[0]);
-            }
-            
-            // Establecer el método
-            if (!empty($url[1])) {
-                $this->methodName = $url[1];
-                unset($url[1]);
-            }
-            
-            // Obtener parámetros
-            $this->params = $url ? array_values($url) : [];
+        $urlParts = [];
+        if (!empty($url) && $url !== '/') {
+            $urlParts = $this->processUrl($url);
         }
+        
+        // Rutas especiales que mapean a métodos del HomeController
+        $homeRoutes = [
+            'categorias' => 'categorias',
+            'producto' => 'producto',
+            'ordenar' => 'ordenar',
+            'login' => 'login',
+            'register' => 'register',
+            'logout' => 'logout'
+        ];
+        
+        // Establecer el controlador (se convierte a formato PascalCase con primera letra mayúscula)
+        if (!empty($urlParts[0])) {
+            $firstPart = $urlParts[0];
+            
+            // Si es una ruta especial del HomeController, usar HomeController
+            if (isset($homeRoutes[$firstPart])) {
+                $this->controllerName = 'HomeController';
+                $this->methodName = $homeRoutes[$firstPart];
+                unset($urlParts[0]);
+            } else {
+                // Intentar buscar un controlador específico
+                $this->controllerName = ucfirst($firstPart) . 'Controller';
+                unset($urlParts[0]);
+            }
+        }
+        
+        // Establecer el método solo si no se estableció desde las rutas especiales
+        if ($this->methodName === 'index' && !empty($urlParts[1])) {
+            $this->methodName = $urlParts[1];
+            unset($urlParts[1]);
+        }
+        
+        // Obtener parámetros
+        $this->params = $urlParts ? array_values($urlParts) : [];
 
         // Verificar si el controlador existe
         $controllerFile = APP_PATH . '/controllers/' . $this->controllerName . '.php';
@@ -66,11 +87,26 @@ class Router {
     private function getUrl() {
         $url = '';
         
+        // Prioridad: usar el parámetro path de .htaccess
+        if (isset($_GET['path'])) {
+            $url = '/' . trim($_GET['path'], '/');
+            if ($url === '/') {
+                $url = '/';
+            }
+            return $url;
+        }
+        
+        // Si no hay parámetro path, usar REQUEST_URI
         if (isset($_SERVER['REQUEST_URI'])) {
             $url = $_SERVER['REQUEST_URI'];
             
-            // Eliminar directorios base para obtener solo la ruta relevante
-            $url = str_replace('/textilpxm/public', '', $url);
+            // Obtener la ruta base del script (directorio donde está index.php)
+            $scriptPath = dirname($_SERVER['SCRIPT_NAME']);
+            
+            // Si la ruta base no es '/', eliminarla de la URL
+            if ($scriptPath !== '/' && $scriptPath !== '\\' && $scriptPath !== '.') {
+                $url = str_replace($scriptPath, '', $url);
+            }
             
             // Eliminar query parameters
             $url = strtok($url, '?');
@@ -92,6 +128,13 @@ class Router {
         if ($url === '/') {
             return [];
         }
-        return explode('/', filter_var($url, FILTER_SANITIZE_URL));
+        // Eliminar la barra inicial si existe
+        $url = ltrim($url, '/');
+        // Dividir por /
+        $parts = explode('/', filter_var($url, FILTER_SANITIZE_URL));
+        // Eliminar elementos vacíos y reindexar
+        return array_values(array_filter($parts, function($part) {
+            return !empty($part);
+        }));
     }
 }

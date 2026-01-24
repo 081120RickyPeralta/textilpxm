@@ -79,8 +79,13 @@ class User extends Model {
     public function login($email, $password) {
         $user = $this->getByEmail($email);
         
-        if ($user && password_verify($password, $user['password'])) {
-            // Remover password del array before return
+        if (!$user) {
+            return false;
+        }
+        
+        // Verificar la contraseña
+        if (password_verify($password, $user['password'])) {
+            // Remover password del array antes de retornar
             unset($user['password']);
             return $user;
         }

@@ -4,9 +4,6 @@
 # Activar el motor de reescritura
 RewriteEngine On
 
-# Directorio base para reescritura (ajustar según tu configuración)
-RewriteBase /
-
 # Prevenir acceso a archivos sensibles
 RewriteRule ^config/ - [F,L]
 RewriteRule ^\. - [F,L]
@@ -15,9 +12,12 @@ RewriteRule ^composer\.lock$ - [F,L]
 RewriteRule \.git - [F,L]
 RewriteRule \.env - [F,L]
 
-# Redirigir todas las solicitudes a index.php
+# Redirigir todas las solicitudes a index.php (excepto archivos y directorios existentes)
+# Evitar bucle infinito: no reescribir si ya es index.php
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/.*index\.php [NC]
+RewriteCond %{REQUEST_URI} !^/.*\.(css|js|jpg|jpeg|png|gif|ico|svg|woff|woff2|ttf|eot)$ [NC]
 RewriteRule ^(.*)$ index.php?path=$1 [L,QSA]
 
 # Opciones de seguridad

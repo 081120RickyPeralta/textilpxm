@@ -14,8 +14,23 @@ define('APP_PATH', ROOT_PATH . '/app');
 define('CONFIG_PATH', ROOT_PATH . '/config');
 define('PUBLIC_PATH', ROOT_PATH . '/public');
 
-// Configuración de URLs
-define('BASE_URL', 'http://localhost/textilpxm/public');
+// Configuración de URLs - Detección automática
+// Obtener el protocolo (http o https)
+$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+
+// Obtener el host
+$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+
+// Obtener la ruta del script actual (index.php)
+$scriptPath = dirname($_SERVER['SCRIPT_NAME']);
+
+// Construir BASE_URL automáticamente
+$baseUrl = $protocol . '://' . $host . $scriptPath;
+
+// Eliminar la barra final si existe
+$baseUrl = rtrim($baseUrl, '/');
+
+define('BASE_URL', $baseUrl);
 define('ASSETS_URL', BASE_URL);
 
 // Configuración de la base de datos
@@ -50,6 +65,8 @@ spl_autoload_register(function($class) {
     $paths = [
         APP_PATH . '/controllers/',
         APP_PATH . '/models/',
+        APP_PATH . '/views/',
+        APP_PATH . '/', // Para Router y otras clases en la raíz de app
     ];
 
     foreach ($paths as $path) {

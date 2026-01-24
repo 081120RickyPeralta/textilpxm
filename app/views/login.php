@@ -8,7 +8,17 @@
                     </h3>
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="/login">
+                    <?php 
+                    $flash = $this->getFlashMessage();
+                    if ($flash): 
+                    ?>
+                        <div class="alert alert-<?php echo $flash['type'] ?? 'danger'; ?> alert-dismissible fade show">
+                            <?php echo htmlspecialchars($flash['message']); ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    <?php endif; ?>
+                    
+                    <form method="POST" action="<?php echo BASE_URL; ?>/login">
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control" id="email" name="email" required>
@@ -19,14 +29,14 @@
                         </div>
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-box-arrow-in-left"></i> Iniciar Sesión
+                                <i class="bi bi-box-arrow-in-left me-2"></i> Iniciar Sesión
                             </button>
                         </div>
                     </form>
                 </div>
                 <div class="card-footer text-center">
                     <p class="mb-0">
-                        ¿No tienes cuenta? <a href="/register">Regístrate aquí</a>
+                        ¿No tienes cuenta? <a href="<?php echo BASE_URL; ?>/register">Regístrate aquí</a>
                     </p>
                 </div>
             </div>
