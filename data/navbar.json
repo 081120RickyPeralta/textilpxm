@@ -1,0 +1,18 @@
+{
+  "brand": "PRENDAS PUERTO ESCONDIDO",
+  "menu": {
+    "inicio": "Inicio",
+    "coleccion": "Colección",
+    "nosotros": "Nosotros",
+    "ordenar": "Ordenar",
+    "contacto": "Contacto"
+  },
+  "search": {
+    "placeholder": "Buscar...",
+    "aria_label": "Buscar producto"
+  },
+  "user": {
+    "gestion": "Gestión",
+    "salir": "Salir"
+  }
+}

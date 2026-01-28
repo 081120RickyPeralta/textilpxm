@@ -1,5 +1,6 @@
 <?php
 // Vista principal - Adaptada del HTML original
+$homeContent = loadContent('home');
 ?>
 
 <style>
@@ -60,13 +61,12 @@
     <div class="hero-overlay"></div>
     <div class="container">
         <div class="text-white" style="max-width: 700px;">
-            <p class="small text-uppercase mb-3 text-warning">Puerto Escondido, Oaxaca</p>
-            <h1 class="display-2 fw-light mb-4 lh-sm">Tradición Textil Oaxaqueña</h1>
+            <p class="small text-uppercase mb-3 text-warning"><?php echo htmlspecialchars(getContent($homeContent, 'hero.location', 'Puerto Escondido, Oaxaca')); ?></p>
+            <h1 class="display-2 fw-light mb-4 lh-sm"><?php echo htmlspecialchars(getContent($homeContent, 'hero.title', 'Tradición Textil Oaxaqueña')); ?></h1>
             <p class="lead mb-4 opacity-75 lh-lg">
-                Descubre prendas únicas tejidas a mano por artesanas de las comunidades indígenas de Oaxaca.
-                Cada pieza cuenta una historia de tradición, color y amor por nuestras raíces.
+                <?php echo htmlspecialchars(getContent($homeContent, 'hero.description', '')); ?>
             </p>
-            <a href="#coleccion" class="btn btn-warning px-4 py-2 small">Explorar Colección</a>
+            <a href="#coleccion" class="btn btn-warning px-4 py-2 small"><?php echo htmlspecialchars(getContent($homeContent, 'hero.cta', 'Explorar Colección')); ?></a>
         </div>
     </div>
 </section>
@@ -76,15 +76,15 @@
     <div class="container">
         <div class="row mb-5">
             <div class="col-lg-6">
-                <p class="small text-uppercase mb-2 text-success">Nuestra Colección</p>
-                <h2 class="display-4 fw-normal mb-3">Prendas Artesanales</h2>
+                <p class="small text-uppercase mb-2 text-success"><?php echo htmlspecialchars(getContent($homeContent, 'collection.badge', 'Nuestra Colección')); ?></p>
+                <h2 class="display-4 fw-normal mb-3"><?php echo htmlspecialchars(getContent($homeContent, 'collection.title', 'Prendas Artesanales')); ?></h2>
                 <p class="text-muted" style="max-width: 500px;">
-                    Cada pieza es elaborada con técnicas ancestrales transmitidas de generación en generación.
+                    <?php echo htmlspecialchars(getContent($homeContent, 'collection.description', '')); ?>
                 </p>
             </div>
             <div class="col-lg-6 text-lg-end d-flex align-items-center justify-content-lg-end">
                 <a href="<?php echo BASE_URL; ?>/categorias" class="btn btn-success px-4 py-2">
-                    <i class="bi bi-grid me-2"></i>Ver Todas las Categorías
+                    <i class="bi bi-grid me-2"></i><?php echo htmlspecialchars(getContent($homeContent, 'collection.cta', 'Ver Todas las Categorías')); ?>
                 </a>
             </div>
         </div>
@@ -116,7 +116,7 @@
         <?php else: ?>
             <div class="col-12">
                 <div class="alert alert-info text-center">
-                    <p class="mb-0">No hay productos disponibles en este momento.</p>
+                    <p class="mb-0"><?php echo htmlspecialchars(getContent($homeContent, 'collection.no_products', 'No hay productos disponibles en este momento.')); ?></p>
                 </div>
             </div>
         <?php endif; ?>
@@ -131,30 +131,27 @@
                 <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=800" alt="Artesanas Oaxaqueñas" class="img-fluid rounded" style="height: 400px; object-fit: cover;">
             </div>
             <div class="col-lg-6">
-                <p class="small text-uppercase mb-2 text-success">Nuestra Historia</p>
-                <h2 class="display-4 fw-normal mb-4">Raíces que Visten</h2>
+                <p class="small text-uppercase mb-2 text-success"><?php echo htmlspecialchars(getContent($homeContent, 'about.badge', 'Nuestra Historia')); ?></p>
+                <h2 class="display-4 fw-normal mb-4"><?php echo htmlspecialchars(getContent($homeContent, 'about.title', 'Raíces que Visten')); ?></h2>
                 <p class="mb-4 text-muted">
-                    Desde el corazón de Puerto Escondido, trabajamos directamente con artesanas de comunidades
-                    zapotecas y mixtecas, preservando técnicas milenarias de tejido en telar de cintura y
-                    bordado a mano.
+                    <?php echo htmlspecialchars(getContent($homeContent, 'about.description1', '')); ?>
                 </p>
                 <p class="mb-4 text-muted">
-                    Cada prenda que ofrecemos representa semanas de trabajo dedicado, usando tintes naturales
-                    extraídos de la grana cochinilla, el añil y otras plantas de la región.
+                    <?php echo htmlspecialchars(getContent($homeContent, 'about.description2', '')); ?>
                 </p>
 
                 <div class="row mt-5">
                     <div class="col-4 text-center">
-                        <p class="display-5 fw-semibold mb-2 text-success">15+</p>
-                        <p class="small text-muted">Años de experiencia</p>
+                        <p class="display-5 fw-semibold mb-2 text-success"><?php echo htmlspecialchars(getContent($homeContent, 'about.stats.years.value', '15+')); ?></p>
+                        <p class="small text-muted"><?php echo htmlspecialchars(getContent($homeContent, 'about.stats.years.label', 'Años de experiencia')); ?></p>
                     </div>
                     <div class="col-4 text-center">
-                        <p class="display-5 fw-semibold mb-2 text-success">50+</p>
-                        <p class="small text-muted">Artesanas colaboradoras</p>
+                        <p class="display-5 fw-semibold mb-2 text-success"><?php echo htmlspecialchars(getContent($homeContent, 'about.stats.artisans.value', '50+')); ?></p>
+                        <p class="small text-muted"><?php echo htmlspecialchars(getContent($homeContent, 'about.stats.artisans.label', 'Artesanas colaboradoras')); ?></p>
                     </div>
                     <div class="col-4 text-center">
-                        <p class="display-5 fw-semibold mb-2 text-success">8</p>
-                        <p class="small text-muted">Comunidades</p>
+                        <p class="display-5 fw-semibold mb-2 text-success"><?php echo htmlspecialchars(getContent($homeContent, 'about.stats.communities.value', '8')); ?></p>
+                        <p class="small text-muted"><?php echo htmlspecialchars(getContent($homeContent, 'about.stats.communities.label', 'Comunidades')); ?></p>
                     </div>
                 </div>
             </div>

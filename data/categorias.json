@@ -1,0 +1,20 @@
+{
+  "search": {
+    "title": "Resultados de Búsqueda",
+    "no_results": "No se encontraron productos que coincidan con \"{term}\".",
+    "view_all": "Ver todas las categorías",
+    "found_singular": "producto encontrado",
+    "found_plural": "productos encontrados"
+  },
+  "collection": {
+    "badge": "Nuestra Colección Completa",
+    "title": "Explora por Categorías",
+    "available_singular": "producto disponible",
+    "available_plural": "productos disponibles",
+    "no_categories": "No se encontraron categorías.",
+    "no_products": "No hay productos disponibles en este momento."
+  },
+  "tabs": {
+    "all": "Todas"
+  }
+}

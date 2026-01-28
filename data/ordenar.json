@@ -1,0 +1,47 @@
+{
+  "header": {
+    "badge": "Haz tu Pedido",
+    "title": "Solicita tu Producto",
+    "description": "Completa el formulario y nos pondremos en contacto contigo para confirmar tu pedido. Realizamos envíos a todo México y al extranjero."
+  },
+  "form": {
+    "product": {
+      "label": "Selecciona un Producto",
+      "placeholder": "Elige un producto..."
+    },
+    "name": {
+      "label": "Nombre Completo",
+      "placeholder": "Ej: Juan Pérez"
+    },
+    "email": {
+      "label": "Correo Electrónico",
+      "placeholder": "Ej: ejemplo@gmail.com"
+    },
+    "phone": {
+      "label": "Teléfono",
+      "placeholder": "Ej: 954 123 4567"
+    },
+    "address": {
+      "label": "Dirección de Envío",
+      "placeholder": "Ej: Calle, número, colonia, ciudad, estado, CP"
+    },
+    "size": {
+      "label": "Talla",
+      "placeholder": "Selecciona una talla"
+    },
+    "quantity": {
+      "label": "Cantidad",
+      "placeholder": "1"
+    },
+    "notes": {
+      "label": "Notas Adicionales",
+      "placeholder": "Comentarios, instrucciones especiales, etc."
+    },
+    "submit": "Solicitar Pedido",
+    "back": "Volver"
+  },
+  "messages": {
+    "select_product": "Por favor, selecciona un producto",
+    "required_fields": "Por favor, completa todos los campos requeridos"
+  }
+}

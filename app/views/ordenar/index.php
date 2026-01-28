@@ -4,6 +4,9 @@
  * Muestra formulario con producto pre-seleccionado y su imagen
  */
 
+// Cargar contenidos desde JSON
+$ordenarContent = loadContent('ordenar');
+
 // Validar que las variables existen
 $selectedProduct = $selectedProduct ?? null;
 $selectedProductId = $selectedProductId ?? null;
@@ -70,11 +73,10 @@ $allProducts = $allProducts ?? [];
                 <!-- Encabezado -->
                 <div class="row mb-5">
                     <div class="col-12 text-center">
-                        <p class="small text-uppercase text-success mb-2">Haz tu Pedido</p>
-                        <h2 class="display-4 fw-normal mb-3">Solicita tu Producto</h2>
+                        <p class="small text-uppercase text-success mb-2"><?php echo htmlspecialchars(getContent($ordenarContent, 'header.badge', 'Haz tu Pedido')); ?></p>
+                        <h2 class="display-4 fw-normal mb-3"><?php echo htmlspecialchars(getContent($ordenarContent, 'header.title', 'Solicita tu Producto')); ?></h2>
                         <p class="text-muted mx-auto" style="max-width: 600px;">
-                            Completa el formulario y nos pondremos en contacto contigo para confirmar tu pedido. 
-                            Realizamos envíos a todo México y al extranjero.
+                            <?php echo htmlspecialchars(getContent($ordenarContent, 'header.description', '')); ?>
                         </p>
                     </div>
                 </div>
@@ -107,21 +109,21 @@ $allProducts = $allProducts ?? [];
                             <form id="orderForm" onsubmit="return enviarWhatsApp(event)">
                                 <div class="row g-3">
                                     <div class="col-md-6">
-                                        <label class="form-label">Nombre Completo *</label>
-                                        <input type="text" class="form-control" id="inputName" name="name" placeholder="Tu nombre" required>
+                                        <label class="form-label"><?php echo htmlspecialchars(getContent($ordenarContent, 'form.name.label', 'Nombre Completo')); ?> *</label>
+                                        <input type="text" class="form-control" id="inputName" name="name" placeholder="<?php echo htmlspecialchars(getContent($ordenarContent, 'form.name.placeholder', 'Tu nombre completo')); ?>" required>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label">Correo Electrónico *</label>
-                                        <input type="email" class="form-control" id="inputEmail" name="email" placeholder="correo@ejemplo.com" required>
+                                        <label class="form-label"><?php echo htmlspecialchars(getContent($ordenarContent, 'form.email.label', 'Correo Electrónico')); ?> *</label>
+                                        <input type="email" class="form-control" id="inputEmail" name="email" placeholder="<?php echo htmlspecialchars(getContent($ordenarContent, 'form.email.placeholder', 'tu@email.com')); ?>" required>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label">Teléfono / WhatsApp *</label>
-                                        <input type="tel" class="form-control" id="inputPhone" name="phone" placeholder="+52 954 123 4567" required>
+                                        <label class="form-label"><?php echo htmlspecialchars(getContent($ordenarContent, 'form.phone.label', 'Teléfono')); ?> *</label>
+                                        <input type="tel" class="form-control" id="inputPhone" name="phone" placeholder="<?php echo htmlspecialchars(getContent($ordenarContent, 'form.phone.placeholder', '+52 954 123 4567')); ?>" required>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label">Prenda de Interés *</label>
+                                        <label class="form-label"><?php echo htmlspecialchars(getContent($ordenarContent, 'form.product.label', 'Selecciona un Producto')); ?> *</label>
                                         <select class="form-select" name="product" id="productSelect" required>
-                                            <option value="" <?php echo !$selectedProductId ? 'selected disabled' : ''; ?>>Selecciona una opción</option>
+                                            <option value="" <?php echo !$selectedProductId ? 'selected disabled' : ''; ?>><?php echo htmlspecialchars(getContent($ordenarContent, 'form.product.placeholder', 'Elige un producto...')); ?></option>
                                             <?php if (!empty($allProducts)): ?>
                                                 <?php foreach ($allProducts as $prod): ?>
                                                     <option value="<?php echo $prod['id']; ?>" 
@@ -136,9 +138,9 @@ $allProducts = $allProducts ?? [];
                                         </select>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label">Talla</label>
+                                        <label class="form-label"><?php echo htmlspecialchars(getContent($ordenarContent, 'form.size.label', 'Talla')); ?></label>
                                         <select class="form-select" id="inputSize" name="size">
-                                            <option value="" selected disabled>Selecciona tu talla</option>
+                                            <option value="" selected disabled><?php echo htmlspecialchars(getContent($ordenarContent, 'form.size.placeholder', 'Selecciona una talla')); ?></option>
                                             <?php if ($selectedProduct && !empty($selectedProduct['tallas_disponibles'])): 
                                                 $tallas = explode(',', $selectedProduct['tallas_disponibles']);
                                                 foreach ($tallas as $talla): 
@@ -165,16 +167,16 @@ $allProducts = $allProducts ?? [];
                                         <input type="text" class="form-control" id="inputCity" name="city" placeholder="Ej: CDMX, Guadalajara">
                                     </div>
                                     <div class="col-12">
-                                        <label class="form-label">Mensaje o Especificaciones</label>
-                                        <textarea class="form-control" id="inputMessage" name="message" rows="3" placeholder="Cuéntanos si tienes alguna solicitud especial, colores preferidos, etc."></textarea>
+                                        <label class="form-label"><?php echo htmlspecialchars(getContent($ordenarContent, 'form.notes.label', 'Notas Adicionales')); ?></label>
+                                        <textarea class="form-control" id="inputMessage" name="message" rows="3" placeholder="<?php echo htmlspecialchars(getContent($ordenarContent, 'form.notes.placeholder', 'Comentarios, instrucciones especiales, etc.')); ?>"></textarea>
                                     </div>
                                     <div class="col-12 mt-4">
                                         <div class="d-flex flex-column flex-sm-row gap-2">
                                             <button type="submit" class="btn btn-success flex-sm-fill">
-                                                <i class="bi bi-whatsapp me-2"></i>Solicitar Pedido
+                                                <i class="bi bi-whatsapp me-2"></i><?php echo htmlspecialchars(getContent($ordenarContent, 'form.submit', 'Solicitar Pedido')); ?>
                                             </button>
                                             <a href="<?php echo $selectedProduct ? BASE_URL . '/producto/' . $selectedProduct['id'] : BASE_URL; ?>" class="btn btn-outline-secondary flex-sm-fill">
-                                                <i class="bi bi-arrow-left me-2"></i>Volver
+                                                <i class="bi bi-arrow-left me-2"></i><?php echo htmlspecialchars(getContent($ordenarContent, 'form.back', 'Volver')); ?>
                                             </a>
                                         </div>
                                     </div>

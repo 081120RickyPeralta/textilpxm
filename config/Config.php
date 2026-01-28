@@ -13,6 +13,7 @@ define('ROOT_PATH', dirname(__DIR__));
 define('APP_PATH', ROOT_PATH . '/app');
 define('CONFIG_PATH', ROOT_PATH . '/config');
 define('PUBLIC_PATH', ROOT_PATH . '/public');
+define('DATA_PATH', ROOT_PATH . '/data');
 
 // Configuración de URLs - Detección automática
 // Obtener el protocolo (http o https)
@@ -59,6 +60,9 @@ date_default_timezone_set('America/Lima');
 // Iniciar sesión
 session_name(SESSION_NAME);
 session_start();
+
+// Incluir helpers
+require_once APP_PATH . '/helpers.php';
 
 // Autoload de clases
 spl_autoload_register(function($class) {

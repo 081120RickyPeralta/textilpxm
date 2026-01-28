@@ -1,0 +1,38 @@
+{
+  "brand": "PRENDAS TÍPICAS OAXACA",
+  "description": "Prendas artesanales de las comunidades indígenas de Oaxaca. Tejiendo tradición desde Puerto Escondido.",
+  "navigation": {
+    "title": "Navegación",
+    "links": {
+      "inicio": "Inicio",
+      "coleccion": "Colección",
+      "nosotros": "Nosotros",
+      "ordenar": "Ordenar"
+    }
+  },
+  "contact": {
+    "title": "Contacto",
+    "address": {
+      "street": "Punta Zicatela",
+      "city": "Puerto Escondido, Oaxaca"
+    },
+    "phone": "+52 954 181 78 23",
+    "email": "prendastipicasoaxaca@gmail.com"
+  },
+  "schedule": {
+    "title": "Horario",
+    "weekdays": {
+      "days": "Fines de semana",
+      "hours": "10:00 AM - 7:00 PM"
+    }
+  },
+  "social": {
+    "facebook": "https://www.facebook.com/profile.php?id=61573404236218",
+    "instagram": "https://www.instagram.com/prendastipicasoaxaca/",
+    "whatsapp": "https://wa.me/529541817823?text=Hola,%20me%20interesa%20información%20sobre%20sus%20productos"
+  },
+  "copyright": {
+    "text": "Oaxaca Textiles. Todos los derechos reservados.",
+    "made_with": "Hecho con amor en Puerto Escondido, Oaxaca"
+  }
+}

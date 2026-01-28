@@ -72,9 +72,13 @@ class HomeController extends Controller {
         // Obtener lista de nombres de categorías
         $categoryNames = array_keys($productsByCategory);
         
+        // Cargar meta para títulos
+        $metaContent = loadContent('meta');
+        $baseTitle = getContent($metaContent, 'pages.categorias.title', 'Categorías | Oaxaca Textiles');
+        
         // Preparar datos para la vista
         $data = [
-            'page_title' => !empty($searchTerm) ? 'Búsqueda: ' . htmlspecialchars($searchTerm) . ' | Oaxaca Textiles' : 'Categorías | Oaxaca Textiles',
+            'page_title' => !empty($searchTerm) ? 'Búsqueda: ' . htmlspecialchars($searchTerm) . ' | ' . getContent($metaContent, 'site.name', 'Oaxaca Textiles') : $baseTitle,
             'categoryNames' => $categoryNames,
             'productsByCategory' => $productsByCategory,
             'selectedCategory' => $categoriaSeleccionada,

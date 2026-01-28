@@ -1,0 +1,35 @@
+{
+  "hero": {
+    "location": "Puerto Escondido, Oaxaca",
+    "title": "Tradición Textil Oaxaqueña",
+    "description": "Descubre prendas únicas tejidas a mano por artesanas de la región. Cada pieza cuenta una historia de tradición, color y amor por nuestras raíces.",
+    "cta": "Explorar Colección"
+  },
+  "collection": {
+    "badge": "Nuestra Colección",
+    "title": "Prendas Artesanales",
+    "description": "Cada pieza es elaborada con técnicas ancestrales transmitidas de generación en generación.",
+    "cta": "Ver Todas las Categorías",
+    "no_products": "No hay productos disponibles en este momento."
+  },
+  "about": {
+    "badge": "Nuestra Historia",
+    "title": "Raíces que Visten",
+    "description1": "Desde el corazón de Puerto Escondido, trabajamos directamente con artesanas de la región, preservando técnicas milenarias de tejido en telar de cintura y bordado a mano.",
+    "description2": "Cada prenda que ofrecemos representa semanas de trabajo dedicado, usando tintes naturales extraídos de la grana cochinilla, el añil y otras plantas de la región.",
+    "stats": {
+      "years": {
+        "value": "15+",
+        "label": "Años de tradición"
+      },
+      "artisans": {
+        "value": "10+",
+        "label": "Paises exportados"
+      },
+      "communities": {
+        "value": "120+",
+        "label": "Productos tejidos"
+      }
+    }
+  }
+}
