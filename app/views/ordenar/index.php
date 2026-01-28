@@ -43,9 +43,8 @@ $allProducts = $allProducts ?? [];
 </script>
 
 <style>
-    /* Estilos específicos para la página de ordenar */
+    /* Solo estilos que no se pueden reemplazar con Bootstrap - Colores personalizados */
     body.ordenar-page {
-        background-color: #f5f3ef !important;
         font-family: 'Inter', sans-serif !important;
     }
     
@@ -56,144 +55,44 @@ $allProducts = $allProducts ?? [];
         display: none !important;
     }
     
-    .ordenar-section {
-        margin-top: 100px;
-        padding: 3rem 0;
-        min-height: 70vh;
-        background-color: #f5f3ef;
-    }
-    
-    .product-preview {
-        background: #fdfcfa;
-        border-radius: 12px;
-        padding: 2rem;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-        margin-bottom: 2rem;
-    }
-    
     .product-preview-image {
         width: 100%;
         max-width: 400px;
         height: 400px;
         object-fit: cover;
-        border-radius: 8px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        margin-bottom: 1.5rem;
-    }
-    
-    .product-preview-title {
-        font-family: 'Cormorant Garamond', serif;
-        font-size: 1.75rem;
-        color: #3d3529;
-        margin-bottom: 0.5rem;
-    }
-    
-    .product-preview-price {
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: #4a6741;
-        margin-bottom: 1rem;
-    }
-    
-    .product-preview-category {
-        font-size: 0.875rem;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        color: #8a8070;
-        margin-bottom: 0.5rem;
-    }
-    
-    .order-form-container {
-        background: #fdfcfa;
-        border-radius: 12px;
-        padding: 2.5rem;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-    }
-    
-    .section-title {
-        font-family: 'Cormorant Garamond', serif;
-        font-size: 2.5rem;
-        font-weight: 400;
-        margin-bottom: 1rem;
-        color: #3d3529;
-    }
-    
-    .section-subtitle {
-        font-size: 0.875rem;
-        letter-spacing: 0.2em;
-        text-transform: uppercase;
-        color: #4a6741;
-        margin-bottom: 0.5rem;
-    }
-    
-    .form-label {
-        font-weight: 500;
-        color: #3d3529;
-        margin-bottom: 0.5rem;
-    }
-    
-    .form-control,
-    .form-select {
-        border: 1px solid #e0dcd4;
-        border-radius: 6px;
-        padding: 0.75rem;
-        background-color: #fff;
-        color: #3d3529;
-    }
-    
-    .form-control:focus,
-    .form-select:focus {
-        border-color: #4a6741;
-        box-shadow: 0 0 0 0.2rem rgba(74, 103, 65, 0.25);
-        outline: none;
-    }
-    
-    .btn-submit {
-        background-color: #4a6741;
-        border-color: #4a6741;
-        padding: 0.875rem 2rem;
-        font-weight: 500;
-        transition: all 0.3s ease;
-    }
-    
-    .btn-submit:hover {
-        background-color: #5a7a50;
-        border-color: #5a7a50;
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(74, 103, 65, 0.3);
     }
 </style>
 
-<div class="ordenar-section">
+<div class="mt-5 pt-5" style="min-height: 70vh;">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <!-- Encabezado -->
                 <div class="row mb-5">
                     <div class="col-12 text-center">
-                        <p class="section-subtitle">Haz tu Pedido</p>
-                        <h2 class="section-title">Solicita tu Producto</h2>
-                        <p style="color: #8a8070; max-width: 600px; margin: 0 auto;">
+                        <p class="small text-uppercase text-success mb-2">Haz tu Pedido</p>
+                        <h2 class="display-4 fw-normal mb-3">Solicita tu Producto</h2>
+                        <p class="text-muted mx-auto" style="max-width: 600px;">
                             Completa el formulario y nos pondremos en contacto contigo para confirmar tu pedido. 
                             Realizamos envíos a todo México y al extranjero.
                         </p>
                     </div>
                 </div>
                 
-                <div class="row g-4">
+                <div class="row g-4 align-items-stretch">
                     <!-- Vista previa del producto (si hay uno seleccionado) -->
                     <?php if ($selectedProduct): ?>
-                        <div class="col-lg-4">
-                            <div class="product-preview">
+                        <div class="col-lg-4 d-flex">
+                            <div class="card shadow-sm p-4 bg-light h-100 w-100">
                                 <img src="<?php echo htmlspecialchars($selectedProduct['imagen_url'] ?: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=800'); ?>" 
                                      alt="<?php echo htmlspecialchars($selectedProduct['nombre']); ?>" 
-                                     class="product-preview-image"
+                                     class="product-preview-image rounded shadow mb-3"
                                      onerror="this.src='https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=800'">
-                                <div class="product-preview-category"><?php echo htmlspecialchars($selectedProduct['categoria']); ?></div>
-                                <h3 class="product-preview-title"><?php echo htmlspecialchars($selectedProduct['nombre']); ?></h3>
-                                <p class="product-preview-price">$<?php echo number_format($selectedProduct['precio'], 2); ?> MXN</p>
+                                <div class="small text-uppercase text-muted mb-2"><?php echo htmlspecialchars($selectedProduct['categoria']); ?></div>
+                                <h3 class="h3 mb-2"><?php echo htmlspecialchars($selectedProduct['nombre']); ?></h3>
+                                <p class="h4 fw-semibold text-success mb-3">$<?php echo number_format($selectedProduct['precio'], 2); ?> MXN</p>
                                 <?php if (!empty($selectedProduct['descripcion'])): ?>
-                                    <p style="color: #8a8070; font-size: 0.9rem; margin-bottom: 0;">
+                                    <p class="text-muted small mb-0">
                                         <?php echo htmlspecialchars(mb_substr($selectedProduct['descripcion'], 0, 100)); ?>
                                         <?php if (mb_strlen($selectedProduct['descripcion']) > 100): ?>...<?php endif; ?>
                                     </p>
@@ -203,8 +102,8 @@ $allProducts = $allProducts ?? [];
                     <?php endif; ?>
                     
                     <!-- Formulario -->
-                    <div class="<?php echo $selectedProduct ? 'col-lg-8' : 'col-lg-12'; ?>">
-                        <div class="order-form-container">
+                    <div class="<?php echo $selectedProduct ? 'col-lg-8' : 'col-lg-12'; ?> d-flex">
+                        <div class="card shadow-sm p-4 p-lg-5 bg-light h-100 w-100">
                             <form id="orderForm" onsubmit="return enviarWhatsApp(event)">
                                 <div class="row g-3">
                                     <div class="col-md-6">
@@ -270,12 +169,14 @@ $allProducts = $allProducts ?? [];
                                         <textarea class="form-control" id="inputMessage" name="message" rows="3" placeholder="Cuéntanos si tienes alguna solicitud especial, colores preferidos, etc."></textarea>
                                     </div>
                                     <div class="col-12 mt-4">
-                                        <button type="submit" class="btn btn-primary btn-submit">
-                                            <i class="bi bi-whatsapp me-2"></i>Solicitar Pedido
-                                        </button>
-                                        <a href="<?php echo $selectedProduct ? BASE_URL . '/producto/' . $selectedProduct['id'] : BASE_URL; ?>" class="btn btn-outline-secondary ms-2">
-                                            <i class="bi bi-arrow-left me-2"></i>Volver
-                                        </a>
+                                        <div class="d-flex flex-column flex-sm-row gap-2">
+                                            <button type="submit" class="btn btn-success flex-sm-fill">
+                                                <i class="bi bi-whatsapp me-2"></i>Solicitar Pedido
+                                            </button>
+                                            <a href="<?php echo $selectedProduct ? BASE_URL . '/producto/' . $selectedProduct['id'] : BASE_URL; ?>" class="btn btn-outline-secondary flex-sm-fill">
+                                                <i class="bi bi-arrow-left me-2"></i>Volver
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </form>
@@ -284,9 +185,9 @@ $allProducts = $allProducts ?? [];
                 </div>
                 
                 <!-- Información adicional -->
-                <div class="row mt-5">
+                <div class="row m-5">
                     <div class="col-12">
-                        <div class="text-center" style="color: #8a8070;">
+                        <div class="text-center text-muted">
                             <p class="mb-2"><i class="bi bi-check-circle me-2"></i> Envío seguro a todo México</p>
                             <p class="mb-2"><i class="bi bi-check-circle me-2"></i> Pago contra entrega disponible</p>
                             <p class="mb-0"><i class="bi bi-check-circle me-2"></i> Garantía de autenticidad</p>

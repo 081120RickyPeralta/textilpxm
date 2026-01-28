@@ -52,11 +52,19 @@ class HomeController extends Controller {
      * Página de categorías con tabs
      */
     public function categorias() {
+        // Obtener término de búsqueda desde GET
+        $searchTerm = isset($_GET['q']) ? trim($_GET['q']) : '';
+        
         // Obtener categoría seleccionada desde GET
         $categoriaSeleccionada = $this->getSelectedCategory();
         
-        // Obtener todos los productos activos
-        $allProducts = $this->productModel->getActive();
+        // Si hay búsqueda, buscar productos
+        if (!empty($searchTerm)) {
+            $allProducts = $this->productModel->search($searchTerm);
+        } else {
+            // Obtener todos los productos activos
+            $allProducts = $this->productModel->getActive();
+        }
         
         // Agrupar productos por categoría usando método del modelo
         $productsByCategory = $this->productModel->groupByCategory($allProducts);
@@ -66,11 +74,12 @@ class HomeController extends Controller {
         
         // Preparar datos para la vista
         $data = [
-            'page_title' => 'Categorías | Oaxaca Textiles',
+            'page_title' => !empty($searchTerm) ? 'Búsqueda: ' . htmlspecialchars($searchTerm) . ' | Oaxaca Textiles' : 'Categorías | Oaxaca Textiles',
             'categoryNames' => $categoryNames,
             'productsByCategory' => $productsByCategory,
             'selectedCategory' => $categoriaSeleccionada,
-            'totalProducts' => count($allProducts)
+            'totalProducts' => count($allProducts),
+            'searchTerm' => $searchTerm
         ];
 
         // Agregar mensaje flash si existe

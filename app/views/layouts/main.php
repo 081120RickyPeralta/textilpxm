@@ -15,58 +15,47 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="<?php echo ASSETS_URL; ?>/css/style.css" rel="stylesheet">
-    <style>
-        /* Estilos base globales - solo colores CSS variables */
-        :root {
-            --color-background: #f5f3ef;
-            --color-foreground: #3d3529;
-            --color-primary: #4a6741;
-            --color-primary-light: #5a7a50;
-            --color-accent: #c4935a;
-            --color-muted: #8a8070;
-            --color-border: #e0dcd4;
-            --color-card: #fdfcfa;
-        }
-        
-        /* Reset para evitar que estilos del home afecten otras páginas */
-        body:not(.home-page) .hero,
-        body:not(.home-page) .order-section,
-        body:not(.home-page) .about-section {
-            display: none !important;
-        }
-    </style>
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg fixed-top" style="background-color: rgba(253, 252, 250, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid #e0dcd4; padding: 1rem 0;">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light border-bottom py-3">
         <div class="container">
-            <a class="navbar-brand" href="<?php echo BASE_URL; ?>" style="font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 600; color: #3d3529 !important; letter-spacing: 0.05em;">
+            <a class="navbar-brand fs-4 fw-semibold text-dark" href="<?php echo BASE_URL; ?>">
                 OAXACA TEXTILES
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" style="border: 2px solid #3d3529; padding: 0.5rem 0.75rem;">
-                <i class="bi bi-list" style="font-size: 1.5rem; color: #3d3529;"></i>
+            <button class="navbar-toggler border-2 px-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="bi bi-list fs-4 text-dark"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="<?php echo BASE_URL; ?>#inicio" style="color: #3d3529 !important; font-size: 0.875rem; letter-spacing: 0.03em;">Inicio</a>
+                        <a class="nav-link text-dark small" href="<?php echo BASE_URL; ?>#inicio">Inicio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?php echo BASE_URL; ?>#coleccion" style="color: #3d3529 !important; font-size: 0.875rem; letter-spacing: 0.03em;">Colección</a>
+                        <a class="nav-link text-dark small" href="<?php echo BASE_URL; ?>#coleccion">Colección</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?php echo BASE_URL; ?>#nosotros" style="color: #3d3529 !important; font-size: 0.875rem; letter-spacing: 0.03em;">Nosotros</a>
+                        <a class="nav-link text-dark small" href="<?php echo BASE_URL; ?>#nosotros">Nosotros</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?php echo BASE_URL; ?>#contacto" style="color: #3d3529 !important; font-size: 0.875rem; letter-spacing: 0.03em;">Contacto</a>
+                        <a class="nav-link text-dark small" href="<?php echo BASE_URL; ?>/ordenar">Ordenar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark small" href="<?php echo BASE_URL; ?>#contacto">Contacto</a>
                     </li>
                 </ul>
+                <form class="d-flex me-3 mb-2 mb-lg-0" role="search" action="<?php echo BASE_URL; ?>/categorias" method="GET" onsubmit="var q = this.q.value.trim(); if (!q) { this.q.value = ''; return false; } this.q.value = q;">
+                    <input class="form-control form-control-sm" type="search" name="q" placeholder="Buscar..." aria-label="Buscar producto" value="<?php echo isset($_GET['q']) ? htmlspecialchars(trim($_GET['q'])) : ''; ?>" style="min-width: 150px;">
+                    <button class="btn btn-outline-success btn-sm" type="submit">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </form>
                 <?php if (isset($_SESSION['user_id'])): ?>
-                    <a href="<?php echo BASE_URL; ?>/products" class="btn btn-primary" style="background-color: #4a6741; border-color: #4a6741; font-size: 0.875rem; letter-spacing: 0.03em; padding: 0.5rem 1.25rem;">
+                    <a href="<?php echo BASE_URL; ?>/products" class="btn btn-success small px-3 py-2">
                         <i class="bi bi-box-seam me-1"></i>Gestión
                     </a>
                     <div class="ms-2">
-                        <span class="navbar-text me-2" style="color: #3d3529;">
+                        <span class="navbar-text me-2 text-dark">
                             <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['user_name'] ?? 'Usuario'); ?>
                         </span>
                         <a class="btn btn-sm btn-outline-secondary" href="<?php echo BASE_URL; ?>/logout">
@@ -78,73 +67,65 @@
         </div>
     </nav>
 
-    <!-- Flash Messages -->
-    <?php if (isset($flash_message) && !empty($flash_message)): ?>
-    <div class="alert alert-<?php echo $flash_type ?? 'success'; ?> alert-dismissible fade show" style="margin-top: 76px; margin-bottom: 0;">
-        <?php echo htmlspecialchars($flash_message); ?>
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    <?php endif; ?>
-
     <!-- Main Content -->
     <main>
         <?php echo $content; ?>
     </main>
 
     <!-- Footer -->
-    <footer id="contacto" style="background-color: #3d3529; color: #fff; padding: 4rem 0 2rem;">
+    <footer id="contacto" class="bg-dark text-white pt-5 pb-2">
         <div class="container">
             <div class="row g-4">
                 <div class="col-lg-4">
-                    <p style="font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 600; color: #fff; margin-bottom: 1rem;">OAXACA TEXTILES</p>
-                    <p style="font-size: 0.875rem; color: rgba(255, 255, 255, 0.7);">
+                    <p class="h4 fw-semibold mb-3">OAXACA TEXTILES</p>
+                    <p class="small text-white-50">
                         Prendas artesanales de las comunidades indígenas de Oaxaca. 
                         Tejiendo tradición desde Puerto Escondido.
                     </p>
                     <div class="mt-3">
-                        <a href="#" style="display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 50%; color: rgba(255, 255, 255, 0.7); transition: all 0.3s ease; margin-right: 0.5rem; text-decoration: none;">
+                        <a href="#" class="d-inline-flex align-items-center justify-content-center rounded-circle border border-white border-opacity-25 text-white-50 text-decoration-none me-2" style="width: 40px; height: 40px;">
                             <i class="bi bi-facebook"></i>
                         </a>
-                        <a href="#" style="display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 50%; color: rgba(255, 255, 255, 0.7); transition: all 0.3s ease; margin-right: 0.5rem; text-decoration: none;">
+                        <a href="#" class="d-inline-flex align-items-center justify-content-center rounded-circle border border-white border-opacity-25 text-white-50 text-decoration-none me-2" style="width: 40px; height: 40px;">
                             <i class="bi bi-instagram"></i>
                         </a>
-                        <a href="#" style="display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 50%; color: rgba(255, 255, 255, 0.7); transition: all 0.3s ease; margin-right: 0.5rem; text-decoration: none;">
+                        <a href="#" class="d-inline-flex align-items-center justify-content-center rounded-circle border border-white border-opacity-25 text-white-50 text-decoration-none me-2" style="width: 40px; height: 40px;">
                             <i class="bi bi-whatsapp"></i>
                         </a>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-4">
-                    <h5 style="font-size: 1rem; font-weight: 600; margin-bottom: 1.25rem; letter-spacing: 0.05em;">Navegación</h5>
+                    <h5 class="h6 fw-semibold mb-4">Navegación</h5>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="<?php echo BASE_URL; ?>#inicio" class="text-decoration-none" style="font-size: 0.875rem; color: rgba(255, 255, 255, 0.7);">Inicio</a></li>
-                        <li class="mb-2"><a href="<?php echo BASE_URL; ?>#coleccion" class="text-decoration-none" style="font-size: 0.875rem; color: rgba(255, 255, 255, 0.7);">Colección</a></li>
-                        <li class="mb-2"><a href="<?php echo BASE_URL; ?>#nosotros" class="text-decoration-none" style="font-size: 0.875rem; color: rgba(255, 255, 255, 0.7);">Nosotros</a></li>
-                        <li class="mb-2"><a href="<?php echo BASE_URL; ?>#ordenar" class="text-decoration-none" style="font-size: 0.875rem; color: rgba(255, 255, 255, 0.7);">Ordenar</a></li>
+                        <li class="mb-2"><a href="<?php echo BASE_URL; ?>#inicio" class="text-decoration-none small text-white-50">Inicio</a></li>
+                        <li class="mb-2"><a href="<?php echo BASE_URL; ?>#coleccion" class="text-decoration-none small text-white-50">Colección</a></li>
+                        <li class="mb-2"><a href="<?php echo BASE_URL; ?>#nosotros" class="text-decoration-none small text-white-50">Nosotros</a></li>
+                        <li class="mb-2"><a href="<?php echo BASE_URL; ?>#ordenar" class="text-decoration-none small text-white-50">Ordenar</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-3 col-md-4">
-                    <h5 style="font-size: 1rem; font-weight: 600; margin-bottom: 1.25rem; letter-spacing: 0.05em;">Contacto</h5>
+                    <h5 class="h6 fw-semibold mb-4">Contacto</h5>
                     <ul class="list-unstyled">
-                        <li class="mb-2" style="font-size: 0.875rem; color: rgba(255, 255, 255, 0.7);"><i class="bi bi-geo-alt me-2"></i>Calle Benito Juárez 123</li>
-                        <li class="mb-2" style="font-size: 0.875rem; color: rgba(255, 255, 255, 0.7);">Puerto Escondido, Oaxaca</li>
-                        <li class="mb-2" style="font-size: 0.875rem; color: rgba(255, 255, 255, 0.7);"><i class="bi bi-telephone me-2"></i>+52 954 582 1234</li>
-                        <li class="mb-2" style="font-size: 0.875rem; color: rgba(255, 255, 255, 0.7);"><i class="bi bi-envelope me-2"></i>hola@oaxacatextiles.mx</li>
+                        <li class="mb-2 small text-white-50"><i class="bi bi-geo-alt me-2"></i>Calle Benito Juárez 123</li>
+                        <li class="mb-2 small text-white-50">Puerto Escondido, Oaxaca</li>
+                        <li class="mb-2 small text-white-50"><i class="bi bi-telephone me-2"></i>+52 954 582 1234</li>
+                        <li class="mb-2 small text-white-50"><i class="bi bi-envelope me-2"></i>hola@oaxacatextiles.mx</li>
                     </ul>
                 </div>
                 <div class="col-lg-3 col-md-4">
-                    <h5 style="font-size: 1rem; font-weight: 600; margin-bottom: 1.25rem; letter-spacing: 0.05em;">Horario</h5>
+                    <h5 class="h6 fw-semibold mb-4">Horario</h5>
                     <ul class="list-unstyled">
-                        <li class="mb-2" style="font-size: 0.875rem; color: rgba(255, 255, 255, 0.7);">Lunes a Sábado</li>
-                        <li class="mb-2" style="font-size: 0.875rem; color: rgba(255, 255, 255, 0.7);">10:00 AM - 7:00 PM</li>
-                        <li class="mb-2 mt-3" style="font-size: 0.875rem; color: rgba(255, 255, 255, 0.7);">Domingo</li>
-                        <li class="mb-2" style="font-size: 0.875rem; color: rgba(255, 255, 255, 0.7);">11:00 AM - 4:00 PM</li>
+                        <li class="mb-2 small text-white-50">Lunes a Sábado</li>
+                        <li class="mb-2 small text-white-50">10:00 AM - 7:00 PM</li>
+                        <li class="mb-2 mt-3 small text-white-50">Domingo</li>
+                        <li class="mb-2 small text-white-50">11:00 AM - 4:00 PM</li>
                     </ul>
                 </div>
             </div>
             
-            <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 2rem; margin-top: 3rem;" class="text-center">
-                <p class="mb-0" style="font-size: 0.875rem; color: rgba(255, 255, 255, 0.7);">&copy; <?php echo date('Y'); ?> Oaxaca Textiles. Todos los derechos reservados.</p>
-                <p class="mt-1" style="font-size: 0.75rem; color: rgba(255, 255, 255, 0.7);">Hecho con amor en Puerto Escondido, Oaxaca</p>
+            <div class="border-top border-white border-opacity-10 pt-4 mt-5 text-center">
+                <p class="mb-0 small text-white-50">&copy; <?php echo date('Y'); ?> Oaxaca Textiles. Todos los derechos reservados.</p>
+                <p class="mt-1 small text-white-50">Hecho con amor en Puerto Escondido, Oaxaca</p>
             </div>
         </div>
     </footer>

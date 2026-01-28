@@ -192,4 +192,23 @@ class Product extends Model {
         }
         return $result['total'] ?? 0;
     }
+
+    /**
+     * Buscar productos por nombre o descripción
+     * @param string $searchTerm Término de búsqueda
+     * @return array Array de productos que coinciden
+     */
+    public function search($searchTerm) {
+        if (empty(trim($searchTerm))) {
+            return [];
+        }
+        
+        $searchTerm = '%' . trim($searchTerm) . '%';
+        $sql = "SELECT * FROM " . $this->table . " 
+                WHERE activo = 1 
+                AND (nombre LIKE ? OR descripcion LIKE ?) 
+                ORDER BY categoria, nombre";
+        
+        return $this->fetchAll($sql, [$searchTerm, $searchTerm]);
+    }
 }

@@ -88,29 +88,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Contador animado para estadísticas
-    function animateCounter(element, target, duration = 2000) {
-        let start = 0;
-        const increment = target / (duration / 16);
-        
-        function updateCounter() {
-            start += increment;
-            if (start < target) {
-                element.textContent = Math.floor(start) + '+';
-                requestAnimationFrame(updateCounter);
-            } else {
-                element.textContent = target + '+';
-            }
-        }
-        
-        updateCounter();
-    }
-
-    const counters = document.querySelectorAll('.display-4');
-    counters.forEach(counter => {
-        const targetValue = parseInt(counter.textContent);
-        animateCounter(counter, targetValue);
-    });
 
     console.log('TextilPXM - Sitio cargado exitosamente');
 });
