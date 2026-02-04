@@ -22,7 +22,7 @@ $homeContent = loadContent('home');
 
     body.home-page .hero {
         position: relative;
-        min-height: 60vh;
+        min-height: 55vh;
         margin-top: 8vh;
     }
 
@@ -61,12 +61,11 @@ $homeContent = loadContent('home');
     <div class="hero-overlay"></div>
     <div class="container">
         <div class="text-white" style="max-width: 700px;">
-            <p class="small text-uppercase mb-3 text-warning"><?php echo htmlspecialchars(getContent($homeContent, 'hero.location', 'Puerto Escondido, Oaxaca')); ?></p>
-            <h1 class="display-2 fw-light mb-4 lh-sm"><?php echo htmlspecialchars(getContent($homeContent, 'hero.title', 'Tradición Textil Oaxaqueña')); ?></h1>
+            <h1 class="display-2 fw-light mb-4 lh-sm mt-5"><?php echo htmlspecialchars(getContent($homeContent, 'hero.title', 'Tradición Textil Oaxaqueña')); ?></h1>
             <p class="lead mb-4 opacity-75 lh-lg">
                 <?php echo htmlspecialchars(getContent($homeContent, 'hero.description', '')); ?>
             </p>
-            <a href="#coleccion" class="btn btn-warning px-4 py-2 small"><?php echo htmlspecialchars(getContent($homeContent, 'hero.cta', 'Explorar Colección')); ?></a>
+            <a href="#coleccion" class="btn btn-warning px-4 py-2 small mb-4"><?php echo htmlspecialchars(getContent($homeContent, 'hero.cta', 'Explorar Colección')); ?></a>
         </div>
     </div>
 </section>
