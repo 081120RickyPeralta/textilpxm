@@ -5,25 +5,20 @@
  */
 
 /**
- * Cargar contenido desde un archivo JSON
- * @param string $filename Nombre del archivo JSON (sin extensión)
- * @return array|false Array con los datos o false si hay error
+ * Cargar contenido desde código PHP (app/content_data.php)
+ * @param string $filename Clave del contenido: navbar, footer, meta, home, categorias, ordenar
+ * @return array|false Array con los datos o false si no existe
  */
 function loadContent($filename) {
-    $filePath = DATA_PATH . '/' . $filename . '.json';
-    
-    if (!file_exists($filePath)) {
-        return false;
+    static $contentData = null;
+    if ($contentData === null) {
+        $filePath = APP_PATH . '/content_data.php';
+        if (!file_exists($filePath)) {
+            return false;
+        }
+        $contentData = require $filePath;
     }
-    
-    $content = file_get_contents($filePath);
-    $data = json_decode($content, true);
-    
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        return false;
-    }
-    
-    return $data;
+    return isset($contentData[$filename]) ? $contentData[$filename] : false;
 }
 
 /**

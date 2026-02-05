@@ -145,12 +145,12 @@ $homeContent = loadContent('home');
                         <p class="small text-muted"><?php echo htmlspecialchars(getContent($homeContent, 'about.stats.years.label', 'Años de experiencia')); ?></p>
                     </div>
                     <div class="col-4 text-center">
-                        <p class="display-5 fw-semibold mb-2 text-success"><?php echo htmlspecialchars(getContent($homeContent, 'about.stats.artisans.value', '50+')); ?></p>
-                        <p class="small text-muted"><?php echo htmlspecialchars(getContent($homeContent, 'about.stats.artisans.label', 'Artesanas colaboradoras')); ?></p>
+                        <p class="display-5 fw-semibold mb-2 text-success"><?php echo htmlspecialchars(getContent($homeContent, 'about.stats.countrys.value', '50+')); ?></p>
+                        <p class="small text-muted"><?php echo htmlspecialchars(getContent($homeContent, 'about.stats.countrys.label', 'Artesanas colaboradoras')); ?></p>
                     </div>
                     <div class="col-4 text-center">
-                        <p class="display-5 fw-semibold mb-2 text-success"><?php echo htmlspecialchars(getContent($homeContent, 'about.stats.communities.value', '8')); ?></p>
-                        <p class="small text-muted"><?php echo htmlspecialchars(getContent($homeContent, 'about.stats.communities.label', 'Comunidades')); ?></p>
+                        <p class="display-5 fw-semibold mb-2 text-success"><?php echo htmlspecialchars(getContent($homeContent, 'about.stats.products.value', '8')); ?></p>
+                        <p class="small text-muted"><?php echo htmlspecialchars(getContent($homeContent, 'about.stats.products.label', 'Comunidades')); ?></p>
                     </div>
                 </div>
             </div>

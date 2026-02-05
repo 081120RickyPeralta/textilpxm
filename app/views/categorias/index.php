@@ -39,9 +39,6 @@ if (!function_exists('renderProductCard')) {
     }
 }
 
-// Cargar contenidos desde JSON
-$categoriasContent = loadContent('categorias');
-
 // Validar que las variables existen
 if (!isset($categoryNames)) {
     $categoryNames = [];
@@ -128,28 +125,22 @@ $debugInfo = [
         <div class="row mb-2">
             <div class="col-12 text-center">
                 <?php if (!empty($searchTerm)): ?>
-                    <p class="small text-uppercase text-success mb-2">
-                        <?php echo htmlspecialchars(getContent($categoriasContent, 'search.title', 'Resultados de Búsqueda')); ?>
-                    </p>
+                    <p class="small text-uppercase text-success mb-2">Resultados de Búsqueda</p>
                     <?php if (isset($totalProducts)): ?>
                         <div class="d-flex justify-content-center">
                             <strong class="text-muted">
-                                <?php echo (int)$totalProducts; ?> <?php echo ($totalProducts == 1) ? getContent($categoriasContent, 'search.found_singular', 'producto encontrado') : getContent($categoriasContent, 'search.found_plural', 'productos encontrados'); ?>
+                                <?php echo (int)$totalProducts; ?> <?php echo ($totalProducts == 1) ? 'producto encontrado' : 'productos encontrados'; ?>
                             </strong>
                         </div>
                     <?php endif; ?>
                     <a href="<?php echo BASE_URL; ?>/categorias" class="btn btn-outline-secondary btn-sm mt-2 mb-2">
-                        <i class="bi bi-arrow-left me-2"></i><?php echo htmlspecialchars(getContent($categoriasContent, 'search.view_all', 'Ver todas las categorías')); ?>
+                        <i class="bi bi-arrow-left me-2"></i>Ver todas las categorías
                     </a>
                 <?php else: ?>
-                    <p class="small text-uppercase text-success mb-2">
-                        <?php echo htmlspecialchars(getContent($categoriasContent, 'collection.badge', 'Nuestra Colección Completa')); ?>
-                    </p>
-                    <h2 class="display-4 fw-normal mb-3">
-                        <?php echo htmlspecialchars(getContent($categoriasContent, 'collection.title', 'Explora por Categorías')); ?>
-                    </h2>
+                    <p class="small text-uppercase text-success mb-2">Nuestra Colección Completa</p>
+                    <h2 class="display-4 fw-normal mb-3">Explora por Categorías</h2>
                     <?php if (isset($totalProducts)): ?>
-                        <p class="text-muted"><?php echo (int)$totalProducts; ?> <?php echo ($totalProducts == 1) ? getContent($categoriasContent, 'collection.available_singular', 'producto disponible') : getContent($categoriasContent, 'collection.available_plural', 'productos disponibles'); ?></p>
+                        <p class="text-muted"><?php echo (int)$totalProducts; ?> <?php echo ($totalProducts == 1) ? 'producto disponible' : 'productos disponibles'; ?></p>
                     <?php endif; ?>
                 <?php endif; ?>
             </div>
@@ -161,7 +152,7 @@ $debugInfo = [
                             class="category-tab btn btn-link text-decoration-none px-4 py-3 border-bottom border-3 <?php echo empty($selectedCategory) ? 'active fw-semibold' : 'border-transparent'; ?>" 
                             data-category="all"
                             aria-label="Ver todas las categorías">
-                        <?php echo htmlspecialchars(getContent($categoriasContent, 'tabs.all', 'Todas')); ?>
+                        Todas
                     </button>
                 <?php foreach ($categoryNames as $categoryName): 
                     $categoryId = preg_replace('/[^a-zA-Z0-9]/', '-', strtolower($categoryName));
@@ -249,7 +240,7 @@ $debugInfo = [
         <?php elseif (empty($searchTerm) && !$hasCategories): ?>
             <!-- Solo mostrar este mensaje si no hay búsqueda activa -->
             <div class="alert alert-info text-center">
-                <p class="mb-0"><?php echo htmlspecialchars(getContent($categoriasContent, 'collection.no_products', 'No hay productos disponibles en este momento.')); ?></p>
+                <p class="mb-0">No hay productos disponibles en este momento.</p>
             </div>
         <?php endif; ?>
     </div>

@@ -1,5 +1,4 @@
 <?php
-// Cargar contenidos desde JSON
 $navbarContent = loadContent('navbar');
 $footerContent = loadContent('footer');
 $metaContent = loadContent('meta');
@@ -35,23 +34,23 @@ $metaContent = loadContent('meta');
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item">
-                        <a class="nav-link text-dark small" href="<?php echo BASE_URL; ?>#inicio"><?php echo htmlspecialchars(getContent($navbarContent, 'menu.inicio', 'Inicio')); ?></a>
+                        <a class="nav-link text-dark small" href="<?php echo BASE_URL; ?>#inicio">Inicio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark small" href="<?php echo BASE_URL; ?>#coleccion"><?php echo htmlspecialchars(getContent($navbarContent, 'menu.coleccion', 'Colección')); ?></a>
+                        <a class="nav-link text-dark small" href="<?php echo BASE_URL; ?>#coleccion">Colección</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark small" href="<?php echo BASE_URL; ?>#nosotros"><?php echo htmlspecialchars(getContent($navbarContent, 'menu.nosotros', 'Nosotros')); ?></a>
+                        <a class="nav-link text-dark small" href="<?php echo BASE_URL; ?>#nosotros">Nosotros</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark small" href="<?php echo BASE_URL; ?>/ordenar"><?php echo htmlspecialchars(getContent($navbarContent, 'menu.ordenar', 'Ordenar')); ?></a>
+                        <a class="nav-link text-dark small" href="<?php echo BASE_URL; ?>/ordenar">Ordenar</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark small" href="<?php echo BASE_URL; ?>#contacto"><?php echo htmlspecialchars(getContent($navbarContent, 'menu.contacto', 'Contacto')); ?></a>
+                        <a class="nav-link text-dark small" href="<?php echo BASE_URL; ?>#contacto">Contacto</a>
                     </li>
                 </ul>
                 <form class="d-flex me-3 mb-2 mb-lg-0" role="search" action="<?php echo BASE_URL; ?>/categorias" method="GET" onsubmit="var q = this.q.value.trim(); if (!q) { this.q.value = ''; return false; } this.q.value = q;">
-                    <input class="form-control form-control-sm" type="search" name="q" placeholder="<?php echo htmlspecialchars(getContent($navbarContent, 'search.placeholder', 'Buscar...')); ?>" aria-label="<?php echo htmlspecialchars(getContent($navbarContent, 'search.aria_label', 'Buscar producto')); ?>" value="<?php echo isset($_GET['q']) ? htmlspecialchars(trim($_GET['q'])) : ''; ?>" style="min-width: 150px;">
+                    <input class="form-control form-control-sm" type="search" name="q" placeholder="Buscar..." aria-label="Buscar producto" value="<?php echo isset($_GET['q']) ? htmlspecialchars(trim($_GET['q'])) : ''; ?>" style="min-width: 150px;">
                     <button class="btn btn-outline-success btn-sm" type="submit">
                         <i class="bi bi-search"></i>
                     </button>
@@ -90,12 +89,12 @@ $metaContent = loadContent('meta');
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-4">
-                    <h5 class="h6 fw-semibold mb-4"><?php echo htmlspecialchars(getContent($footerContent, 'navigation.title', 'Navegación')); ?></h5>
+                    <h5 class="h6 fw-semibold mb-4">Navegación</h5>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="<?php echo BASE_URL; ?>#inicio" class="text-decoration-none small text-white-50"><?php echo htmlspecialchars(getContent($footerContent, 'navigation.links.inicio', 'Inicio')); ?></a></li>
-                        <li class="mb-2"><a href="<?php echo BASE_URL; ?>#coleccion" class="text-decoration-none small text-white-50"><?php echo htmlspecialchars(getContent($footerContent, 'navigation.links.coleccion', 'Colección')); ?></a></li>
-                        <li class="mb-2"><a href="<?php echo BASE_URL; ?>#nosotros" class="text-decoration-none small text-white-50"><?php echo htmlspecialchars(getContent($footerContent, 'navigation.links.nosotros', 'Nosotros')); ?></a></li>
-                        <li class="mb-2"><a href="<?php echo BASE_URL; ?>#ordenar" class="text-decoration-none small text-white-50"><?php echo htmlspecialchars(getContent($footerContent, 'navigation.links.ordenar', 'Ordenar')); ?></a></li>
+                        <li class="mb-2"><a href="<?php echo BASE_URL; ?>#inicio" class="text-decoration-none small text-white-50">Inicio</a></li>
+                        <li class="mb-2"><a href="<?php echo BASE_URL; ?>#coleccion" class="text-decoration-none small text-white-50">Colección</a></li>
+                        <li class="mb-2"><a href="<?php echo BASE_URL; ?>#nosotros" class="text-decoration-none small text-white-50">Nosotros</a></li>
+                        <li class="mb-2"><a href="<?php echo BASE_URL; ?>#ordenar" class="text-decoration-none small text-white-50">Ordenar</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-3 col-md-4">
@@ -112,8 +111,6 @@ $metaContent = loadContent('meta');
                     <ul class="list-unstyled">
                         <li class="mb-2 small text-white-50"><?php echo htmlspecialchars(getContent($footerContent, 'schedule.weekdays.days', '')); ?></li>
                         <li class="mb-2 small text-white-50"><?php echo htmlspecialchars(getContent($footerContent, 'schedule.weekdays.hours', '')); ?></li>
-                        <li class="mb-2 mt-3 small text-white-50"><?php echo htmlspecialchars(getContent($footerContent, 'schedule.sunday.days', '')); ?></li>
-                        <li class="mb-2 small text-white-50"><?php echo htmlspecialchars(getContent($footerContent, 'schedule.sunday.hours', '')); ?></li>
                     </ul>
                 </div>
             </div>
