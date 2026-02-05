@@ -10,7 +10,8 @@ $metaContent = loadContent('meta');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title><?php echo $page_title ?? getContent($metaContent, 'site.name', 'Oaxaca Textiles'); ?></title>
-    <link rel="icon" type="image/x-icon" href="<?php echo ASSETS_URL; ?>/images/icon.ico">
+    <?php $siteIcon = trim(getContent($metaContent, 'site.icon', '')); $faviconHref = $siteIcon !== '' ? ASSETS_URL . '/images/' . htmlspecialchars($siteIcon) : ASSETS_URL . '/images/icon.ico'; ?>
+    <link rel="icon" type="image/x-icon" href="<?php echo $faviconHref; ?>">
     <meta name="description" content="<?php echo htmlspecialchars(getContent($metaContent, 'site.description', '')); ?>">
     
     <!-- Bootstrap 5 CSS -->
@@ -27,7 +28,14 @@ $metaContent = loadContent('meta');
     <nav class="navbar navbar-expand-lg fixed-top bg-light border-bottom py-3">
         <div class="container">
             <a class="navbar-brand fs-4 fw-semibold text-dark d-flex align-items-center gap-2" href="<?php echo BASE_URL; ?>">
-                <img src="<?php echo ASSETS_URL; ?>/images/icon.png" alt="" width="32" height="32" class="d-inline-block">
+                <?php
+                $navbarLogo = trim(getContent($navbarContent, 'logo', ''));
+                $navIcon = $siteIcon !== '' ? ASSETS_URL . '/images/' . htmlspecialchars($siteIcon) : ASSETS_URL . '/images/icon.png';
+                if ($navbarLogo !== ''): ?>
+                <img src="<?php echo ASSETS_URL; ?>/images/<?php echo htmlspecialchars($navbarLogo); ?>" alt="<?php echo htmlspecialchars(getContent($navbarContent, 'brand', '')); ?>" height="40" class="d-inline-block align-middle">
+                <?php else: ?>
+                <img src="<?php echo $navIcon; ?>" alt="" width="32" height="32" class="d-inline-block">
+                <?php endif; ?>
                 <?php echo htmlspecialchars(getContent($navbarContent, 'brand', 'OAXACA TEXTILES')); ?>
             </a>
             <button class="navbar-toggler border-2 px-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">

@@ -277,24 +277,61 @@ class AdminController extends Controller {
         $this->requireAdmin();
 
         if ($action === 'guardar' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            $uploadDir = PUBLIC_PATH . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . 'site';
+            if (!is_dir($uploadDir)) {
+                @mkdir($uploadDir, 0755, true);
+            }
+            $allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/x-icon'];
+            $navbarLogoPath = '';
+            $siteIconPath = '';
+            $heroImagePath = '';
+            $aboutImagePath = '';
+            $uploadFile = function($inputKey, $destName) use ($uploadDir, $allowedTypes) {
+                if (empty($_FILES[$inputKey]['tmp_name']) || $_FILES[$inputKey]['error'] !== UPLOAD_ERR_OK) return '';
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $mime = finfo_file($finfo, $_FILES[$inputKey]['tmp_name']);
+                finfo_close($finfo);
+                if (!in_array($mime, $allowedTypes, true)) return '';
+                $ext = (new SplFileInfo($_FILES[$inputKey]['name']))->getExtension() ?: 'png';
+                $ext = preg_replace('/[^a-z0-9]/i', '', $ext) ?: 'png';
+                $dest = $uploadDir . DIRECTORY_SEPARATOR . $destName . '.' . $ext;
+                return move_uploaded_file($_FILES[$inputKey]['tmp_name'], $dest) ? ('site/' . $destName . '.' . $ext) : '';
+            };
+            $navbarLogoPath = $uploadFile('navbar_logo', 'logo-navbar');
+            $siteIconPath = $uploadFile('meta_site_icon', 'icon');
+            $heroImagePath = $uploadFile('home_hero_image', 'banner');
+            $aboutImagePath = $uploadFile('home_about_image', 'about');
             $keys = [
-                'navbar_brand', 'footer_brand', 'footer_description',
+                'navbar_brand', 'navbar_logo', 'footer_brand', 'footer_description',
                 'footer_contact_title', 'footer_contact_street', 'footer_contact_city', 'footer_contact_phone', 'footer_contact_email',
                 'footer_schedule_title', 'footer_schedule_days', 'footer_schedule_hours', 'footer_schedule_days_2', 'footer_schedule_hours_2',
                 'footer_social_facebook', 'footer_social_instagram', 'footer_social_whatsapp',
                 'footer_copyright_text', 'footer_copyright_made_with',
-                'meta_site_name', 'meta_site_description', 'meta_site_location',
-                'home_hero_location', 'home_hero_title', 'home_hero_description',
+                'meta_site_name', 'meta_site_icon', 'meta_site_description', 'meta_site_location',
+                'home_hero_location', 'home_hero_title', 'home_hero_description', 'home_hero_image',
                 'home_collection_title', 'home_collection_description', 'home_collection_no_products',
-                'home_about_badge', 'home_about_title', 'home_about_description1', 'home_about_description2',
+                'home_about_badge', 'home_about_title', 'home_about_description1', 'home_about_description2', 'home_about_image',
                 'home_about_stats_years_value', 'home_about_stats_years_label',
                 'home_about_stats_countrys_value', 'home_about_stats_countrys_label',
                 'home_about_stats_products_value', 'home_about_stats_products_label',
             ];
+            try {
+                $flat = $this->siteContentModel->getAll();
+            } catch (Throwable $e) {
+                $flat = [];
+            }
             foreach ($keys as $key) {
                 if ($key === 'footer_social_whatsapp') {
                     $number = trim($_POST['footer_social_whatsapp_number'] ?? '');
                     $value = SiteContent::numberToWhatsAppUrl($number);
+                } elseif ($key === 'navbar_logo') {
+                    $value = $navbarLogoPath !== '' ? $navbarLogoPath : ($flat[$key] ?? '');
+                } elseif ($key === 'meta_site_icon') {
+                    $value = $siteIconPath !== '' ? $siteIconPath : ($flat[$key] ?? '');
+                } elseif ($key === 'home_hero_image') {
+                    $value = $heroImagePath !== '' ? $heroImagePath : ($flat[$key] ?? '');
+                } elseif ($key === 'home_about_image') {
+                    $value = $aboutImagePath !== '' ? $aboutImagePath : ($flat[$key] ?? '');
                 } else {
                     $value = trim($_POST[$key] ?? '');
                 }
@@ -334,8 +371,9 @@ class AdminController extends Controller {
         }
         $data = require $file;
         $flat = [];
-        if (!empty($data['navbar']['brand'])) {
-            $flat['navbar_brand'] = $data['navbar']['brand'];
+        if (!empty($data['navbar'])) {
+            $flat['navbar_brand'] = $data['navbar']['brand'] ?? '';
+            $flat['navbar_logo'] = $data['navbar']['logo'] ?? '';
         }
         if (!empty($data['footer'])) {
             $f = $data['footer'];
@@ -360,6 +398,7 @@ class AdminController extends Controller {
         if (!empty($data['meta']['site'])) {
             $s = $data['meta']['site'];
             $flat['meta_site_name'] = $s['name'] ?? '';
+            $flat['meta_site_icon'] = $s['icon'] ?? '';
             $flat['meta_site_description'] = $s['description'] ?? '';
             $flat['meta_site_location'] = $s['location'] ?? '';
         }
@@ -368,6 +407,7 @@ class AdminController extends Controller {
             $flat['home_hero_location'] = $h['hero']['location'] ?? '';
             $flat['home_hero_title'] = $h['hero']['title'] ?? '';
             $flat['home_hero_description'] = $h['hero']['description'] ?? '';
+            $flat['home_hero_image'] = $h['hero']['image'] ?? '';
             $flat['home_collection_title'] = $h['collection']['title'] ?? '';
             $flat['home_collection_description'] = $h['collection']['description'] ?? '';
             $flat['home_collection_no_products'] = $h['collection']['no_products'] ?? '';
@@ -375,6 +415,7 @@ class AdminController extends Controller {
             $flat['home_about_title'] = $h['about']['title'] ?? '';
             $flat['home_about_description1'] = $h['about']['description1'] ?? '';
             $flat['home_about_description2'] = $h['about']['description2'] ?? '';
+            $flat['home_about_image'] = $h['about']['image'] ?? '';
             $flat['home_about_stats_years_value'] = $h['about']['stats']['years']['value'] ?? '';
             $flat['home_about_stats_years_label'] = $h['about']['stats']['years']['label'] ?? '';
             $flat['home_about_stats_countrys_value'] = $h['about']['stats']['countrys']['value'] ?? '';

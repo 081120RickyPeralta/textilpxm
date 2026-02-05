@@ -13,7 +13,8 @@ $admin_site_name_navbar = getContent($navbarContent, 'brand', 'OAXACA TEXTILES')
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
     <title><?php echo htmlspecialchars($admin_page_title); ?> · <?php echo htmlspecialchars($admin_site_name); ?> Admin</title>
-    <link rel="icon" type="image/x-icon" href="<?php echo ASSETS_URL; ?>/images/icon.ico">
+    <?php $adminSiteIcon = trim(getContent($metaContent, 'site.icon', '')); $adminFavicon = $adminSiteIcon !== '' ? ASSETS_URL . '/images/' . htmlspecialchars($adminSiteIcon) : ASSETS_URL . '/images/icon.ico'; ?>
+    <link rel="icon" type="image/x-icon" href="<?php echo $adminFavicon; ?>">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
@@ -24,7 +25,11 @@ $admin_site_name_navbar = getContent($navbarContent, 'brand', 'OAXACA TEXTILES')
     <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom shadow-sm fixed-top py-3">
         <div class="container">
             <a href="<?php echo BASE_URL; ?>/admin" class="navbar-brand fw-bold d-flex align-items-center gap-2">
-                <img src="<?php echo ASSETS_URL; ?>/images/icon.png" alt="" width="32" height="32" class="d-inline-block">
+                <?php
+                $adminNavLogo = trim(getContent($navbarContent, 'logo', ''));
+                $adminNavImgSrc = $adminNavLogo !== '' ? ASSETS_URL . '/images/' . htmlspecialchars($adminNavLogo) : ($adminSiteIcon !== '' ? ASSETS_URL . '/images/' . htmlspecialchars($adminSiteIcon) : ASSETS_URL . '/images/icon.png');
+                ?>
+                <img src="<?php echo $adminNavImgSrc; ?>" alt="" width="32" height="32" class="d-inline-block">
                 <?php echo htmlspecialchars($admin_site_name_navbar); ?> Admin
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar" aria-controls="adminNavbar" aria-expanded="false" aria-label="Abrir menú">

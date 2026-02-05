@@ -36,6 +36,7 @@ class SiteContent extends Model {
         return [
             'navbar' => [
                 'brand' => $get('navbar_brand'),
+                'logo' => $get('navbar_logo'),
             ],
             'footer' => [
                 'brand' => $get('footer_brand'),
@@ -73,6 +74,7 @@ class SiteContent extends Model {
             'meta' => [
                 'site' => [
                     'name' => $get('meta_site_name'),
+                    'icon' => $get('meta_site_icon'),
                     'description' => $get('meta_site_description'),
                     'location' => $get('meta_site_location'),
                 ],
@@ -82,6 +84,7 @@ class SiteContent extends Model {
                     'location' => $get('home_hero_location'),
                     'title' => $get('home_hero_title'),
                     'description' => $get('home_hero_description'),
+                    'image' => $get('home_hero_image'),
                 ],
                 'collection' => [
                     'title' => $get('home_collection_title'),
@@ -93,6 +96,7 @@ class SiteContent extends Model {
                     'title' => $get('home_about_title'),
                     'description1' => $get('home_about_description1'),
                     'description2' => $get('home_about_description2'),
+                    'image' => $get('home_about_image'),
                     'stats' => [
                         'years' => [
                             'value' => $get('home_about_stats_years_value'),

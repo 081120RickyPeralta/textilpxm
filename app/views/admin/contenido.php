@@ -17,7 +17,7 @@ $v = function($key) use ($c) { return htmlspecialchars($c[$key] ?? '', ENT_QUOTE
     <?php endif; ?>
 
     <div class="card-body p-4">
-        <form method="post" action="<?php echo BASE_URL; ?>/admin/contenido/guardar">
+        <form method="post" action="<?php echo BASE_URL; ?>/admin/contenido/guardar" enctype="multipart/form-data">
             <ul class="nav nav-tabs mb-3" id="contenidoTabs" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="tab-3-btn" data-bs-toggle="tab" data-bs-target="#tab-3" type="button" role="tab" aria-selected="true">Título y descripción del sitio (pestaña y buscadores)</button>
@@ -35,10 +35,32 @@ $v = function($key) use ($c) { return htmlspecialchars($c[$key] ?? '', ENT_QUOTE
             <div class="tab-content" id="contenidoTabsContent">
                 <div class="tab-pane fade" id="tab-1" role="tabpanel">
                 <div class="mb-3">
-                    <label for="navbar_brand" class="form-label">Nombre de la marca que se ve arriba</label>
+                    <label for="navbar_logo" class="form-label">Logo del encabezado (imagen)</label>
+                    <?php
+                    $navbar_logo = $c['navbar_logo'] ?? '';
+                    if ($navbar_logo !== '' && preg_match('/^site\/[a-zA-Z0-9_.-]+$/', $navbar_logo)):
+                    ?>
+                    <div class="mb-2">
+                        <img src="<?php echo ASSETS_URL; ?>/images/<?php echo htmlspecialchars($navbar_logo); ?>" alt="Logo actual" class="img-thumbnail" style="max-height: 60px;">
+                        <p class="small text-muted mb-0">Imagen actual. Sube otra para reemplazarla.</p>
+                    </div>
+                    <?php endif; ?>
+                    <input type="file" class="form-control" id="navbar_logo" name="navbar_logo" accept="image/jpeg,image/png,image/webp,image/gif">
+                    <small class="text-muted">Reemplaza el icono del encabezado. Formatos: JPG, PNG, WebP, GIF.</small>
+                </div>
+                <div class="mb-3">
+                    <label for="navbar_brand" class="form-label">Nombre de la marca (texto, si no usas logo)</label>
                     <input type="text" class="form-control" id="navbar_brand" name="navbar_brand" value="<?php echo $v('navbar_brand'); ?>">
                 </div>
                 <h4 class="text-muted">Banner principal (lo primero que ve el visitante)</h4>
+                <div class="mb-3">
+                    <label for="home_hero_image" class="form-label">Imagen del banner</label>
+                    <?php $hero_img = $c['home_hero_image'] ?? ''; if ($hero_img !== '' && preg_match('/^site\/[a-zA-Z0-9_.-]+$/', $hero_img)): ?>
+                    <div class="mb-2"><img src="<?php echo ASSETS_URL; ?>/images/<?php echo htmlspecialchars($hero_img); ?>" alt="Banner actual" class="img-thumbnail" style="max-height: 80px;"></div>
+                    <?php endif; ?>
+                    <input type="file" class="form-control" id="home_hero_image" name="home_hero_image" accept="image/jpeg,image/png,image/webp,image/gif">
+                    <small class="text-muted">Se muestra en la portada. JPG, PNG, WebP, GIF.</small>
+                </div>
                 <div class="mb-3">
                     <label for="home_hero_location" class="form-label">Lugar que se muestra</label>
                     <input type="text" class="form-control" id="home_hero_location" name="home_hero_location" value="<?php echo $v('home_hero_location'); ?>">
@@ -71,8 +93,15 @@ $v = function($key) use ($c) { return htmlspecialchars($c[$key] ?? '', ENT_QUOTE
                 </div>
 
                 <div class="tab-pane fade" id="tab-2" role="tabpanel">
-                
                 <h4 class="text-muted mt-3">Sección «Nosotros» o «Quiénes somos»</h4>
+                <div class="mb-3">
+                    <label for="home_about_image" class="form-label">Imagen de Nuestra Historia</label>
+                    <?php $about_img = $c['home_about_image'] ?? ''; if ($about_img !== '' && preg_match('/^site\/[a-zA-Z0-9_.-]+$/', $about_img)): ?>
+                    <div class="mb-2"><img src="<?php echo ASSETS_URL; ?>/images/<?php echo htmlspecialchars($about_img); ?>" alt="Imagen actual" class="img-thumbnail" style="max-height: 80px;"></div>
+                    <?php endif; ?>
+                    <input type="file" class="form-control" id="home_about_image" name="home_about_image" accept="image/jpeg,image/png,image/webp,image/gif">
+                    <small class="text-muted">Imagen que acompaña el texto. JPG, PNG, WebP, GIF.</small>
+                </div>
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="home_about_badge" class="form-label">Texto pequeño arriba (ej. «Nuestra historia»)</label>
@@ -125,6 +154,14 @@ $v = function($key) use ($c) { return htmlspecialchars($c[$key] ?? '', ENT_QUOTE
                 </div>
 
                 <div class="tab-pane fade show active" id="tab-3" role="tabpanel">
+                <div class="mb-3">
+                    <label for="meta_site_icon" class="form-label">Icono del sitio (favicon y logo en navegación)</label>
+                    <?php $site_icon = $c['meta_site_icon'] ?? ''; if ($site_icon !== '' && preg_match('/^site\/[a-zA-Z0-9_.-]+$/', $site_icon)): ?>
+                    <div class="mb-2"><img src="<?php echo ASSETS_URL; ?>/images/<?php echo htmlspecialchars($site_icon); ?>" alt="Icono actual" class="img-thumbnail" style="max-height: 48px;"></div>
+                    <?php endif; ?>
+                    <input type="file" class="form-control" id="meta_site_icon" name="meta_site_icon" accept="image/jpeg,image/png,image/webp,image/gif,image/x-icon">
+                    <small class="text-muted">Aparece en la pestaña del navegador y en el encabezado. PNG, ICO, JPG, WebP, GIF.</small>
+                </div>
                 <div class="mb-3">
                     <label for="meta_site_name" class="form-label">Nombre de tu negocio o sitio</label>
                     <input type="text" class="form-control" id="meta_site_name" name="meta_site_name" value="<?php echo $v('meta_site_name'); ?>">
