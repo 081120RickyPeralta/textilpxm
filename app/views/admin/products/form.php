@@ -10,6 +10,7 @@ $imagen_url = $product['imagen_url'] ?? '';
 $activo = (int)($product['activo'] ?? 1);
 $portada = (int)($product['portada'] ?? 0);
 $tallas_disponibles = $product['tallas_disponibles'] ?? '';
+$tallas_array = array_filter(array_map('trim', explode(',', $tallas_disponibles)));
 ?>
 
 <?php if (!empty($flash_message)): ?>
@@ -61,10 +62,20 @@ $tallas_disponibles = $product['tallas_disponibles'] ?? '';
                    value="<?php echo htmlspecialchars($imagen_url); ?>" placeholder="https://...">
         </div>
         <div class="mb-3">
-            <label for="tallas_disponibles" class="form-label">Tallas disponibles</label>
-            <input type="text" class="form-control" id="tallas_disponibles" name="tallas_disponibles"
-                   value="<?php echo htmlspecialchars($tallas_disponibles); ?>"
-                   placeholder="Ej: S, M, L, XL">
+            <label class="form-label">Tallas disponibles</label>
+            <input type="hidden" id="tallas_disponibles" name="tallas_disponibles" value="<?php echo htmlspecialchars($tallas_disponibles); ?>">
+            <div class="d-flex flex-wrap gap-2 align-items-center mb-2">
+                <input type="text" class="form-control form-control-sm" id="talla-nueva" placeholder="Escribe una talla y pulsa Agregar" style="max-width: 280px;" autocomplete="off">
+                <button type="button" class="btn btn-sm btn-outline-dark" id="btn-agregar-talla">Agregar</button>
+            </div>
+            <div id="tallas-chips" class="d-flex flex-wrap gap-1">
+                <?php foreach ($tallas_array as $t): ?>
+                <span class="badge bg-secondary d-inline-flex align-items-center gap-1 py-2 px-2">
+                    <?php echo htmlspecialchars($t); ?>
+                    <button type="button" class="btn btn-link p-0 text-white text-decoration-none" style="font-size: 0.9rem; line-height: 1;" data-talla="<?php echo htmlspecialchars($t); ?>" aria-label="Quitar">×</button>
+                </span>
+                <?php endforeach; ?>
+            </div>
         </div>
         <div class="mb-4">
             <div class="form-check form-check-inline">
@@ -83,6 +94,65 @@ $tallas_disponibles = $product['tallas_disponibles'] ?? '';
     </form>
     </div>
 </div>
+
+<script>
+(function() {
+    var hidden = document.getElementById('tallas_disponibles');
+    var inputNueva = document.getElementById('talla-nueva');
+    var btnAgregar = document.getElementById('btn-agregar-talla');
+    var container = document.getElementById('tallas-chips');
+    var form = document.getElementById('form-producto');
+    if (!hidden || !container) return;
+
+    function getTallas() {
+        var v = (hidden.value || '').trim();
+        return v ? v.split(',').map(function(s) { return s.trim(); }).filter(Boolean) : [];
+    }
+
+    function setTallas(arr) {
+        hidden.value = arr.join(',');
+        if (form) {
+            var e = new Event('change', { bubbles: true });
+            form.dispatchEvent(e);
+        }
+    }
+
+    function agregarTalla() {
+        var val = (inputNueva.value || '').trim();
+        if (!val) return;
+        var tallas = getTallas();
+        if (tallas.indexOf(val) !== -1) return;
+        tallas.push(val);
+        setTallas(tallas);
+        var span = document.createElement('span');
+        span.className = 'badge bg-secondary d-inline-flex align-items-center gap-1 py-2 px-2';
+        span.innerHTML = val + ' <button type="button" class="btn btn-link p-0 text-white text-decoration-none" style="font-size: 0.9rem; line-height: 1;" data-talla="' + val.replace(/"/g, '&quot;') + '" aria-label="Quitar">×</button>';
+        container.appendChild(span);
+        span.querySelector('button').addEventListener('click', quitarTalla);
+        inputNueva.value = '';
+        inputNueva.focus();
+    }
+
+    function quitarTalla(ev) {
+        var btn = ev.target;
+        var t = btn.getAttribute('data-talla');
+        if (!t) return;
+        var tallas = getTallas().filter(function(x) { return x !== t; });
+        setTallas(tallas);
+        btn.closest('.badge').remove();
+    }
+
+    if (btnAgregar) btnAgregar.addEventListener('click', agregarTalla);
+    if (inputNueva) {
+        inputNueva.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault(); agregarTalla(); }
+        });
+    }
+    container.querySelectorAll('button[data-talla]').forEach(function(btn) {
+        btn.addEventListener('click', quitarTalla);
+    });
+})();
+</script>
 
 <?php if ($isEdit): ?>
 <script>
