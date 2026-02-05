@@ -49,6 +49,11 @@ define('SITE_EMAIL', 'info@textilpxm.com');
 define('SESSION_NAME', 'TEXTILPXM_SESSION');
 define('SESSION_LIFETIME', 86400); // 24 horas
 
+// Cookie "Recordarme" para administradores (solo /admin)
+define('REMEMBER_ME_COOKIE', 'TEXTILPXM_ADMIN_REMEMBER');
+define('REMEMBER_ME_SECRET', 'textilpxm_remember_secret_' . PROJECT_NAME);
+define('REMEMBER_ME_DAYS', 14);
+
 // Configuración de errores (descomentar en desarrollo)
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -81,3 +86,8 @@ spl_autoload_register(function($class) {
         }
     }
 });
+
+// Restaurar sesión de admin desde cookie "recordarme"
+if (empty($_SESSION['user_id']) && !empty($_COOKIE[REMEMBER_ME_COOKIE])) {
+    restoreAdminSessionFromCookie();
+}

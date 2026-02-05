@@ -18,10 +18,11 @@ class Controller {
 
     /**
      * Renderizar una vista con el layout
+     * @param string $layout 'main', 'admin' o null para sin layout
      */
-    protected function render($view, $data = []) {
+    protected function render($view, $data = [], $layout = 'main') {
         $this->data = array_merge($this->data, $data);
-        $this->view->render($view, $this->data);
+        $this->view->render($view, $this->data, $layout);
     }
 
     /**

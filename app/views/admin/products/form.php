@@ -1,0 +1,140 @@
+<?php
+$isEdit = !empty($product['id']);
+$formAction = $isEdit ? BASE_URL . '/admin/actualizar/' . (int)$product['id'] : BASE_URL . '/admin/guardar';
+$nombre = $product['nombre'] ?? '';
+$descripcion = $product['descripcion'] ?? '';
+$categoria = $product['categoria'] ?? '';
+$precio = $product['precio'] ?? '';
+$stock = $product['stock'] ?? 0;
+$imagen_url = $product['imagen_url'] ?? '';
+$activo = (int)($product['activo'] ?? 1);
+$portada = (int)($product['portada'] ?? 0);
+$tallas_disponibles = $product['tallas_disponibles'] ?? '';
+?>
+
+<?php if (!empty($flash_message)): ?>
+    <div class="alert alert-<?php echo $flash_type === 'danger' ? 'danger' : 'success'; ?> mb-3">
+        <?php echo htmlspecialchars($flash_message); ?>
+    </div>
+<?php endif; ?>
+
+<div class="card shadow-sm mx-auto mb-4" style="max-width: 720px; margin-top: 3rem;">
+    <div class="card-body p-4">
+    <h1 class="h4 fw-bold mb-3 text-center"><?php echo $isEdit ? 'Editar producto' : 'Nuevo producto'; ?></h1>
+    <form method="post" action="<?php echo $formAction; ?>" id="form-producto">
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="nombre" name="nombre" required
+                   value="<?php echo htmlspecialchars($nombre); ?>">
+        </div>
+        <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripción</label>
+            <textarea class="form-control" id="descripcion" name="descripcion" rows="3"><?php echo htmlspecialchars($descripcion); ?></textarea>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="categoria" class="form-label">Categoría <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="categoria" name="categoria" required
+                       list="categorias-list" value="<?php echo htmlspecialchars($categoria); ?>">
+                <?php if (!empty($categories)): ?>
+                    <datalist id="categorias-list">
+                        <?php foreach ($categories as $cat): ?>
+                            <option value="<?php echo htmlspecialchars($cat); ?>">
+                        <?php endforeach; ?>
+                    </datalist>
+                <?php endif; ?>
+            </div>
+            <div class="col-md-3 mb-3">
+                <label for="precio" class="form-label">Precio <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="precio" name="precio" required
+                       value="<?php echo htmlspecialchars($precio); ?>" placeholder="0.00">
+            </div>
+            <div class="col-md-3 mb-3">
+                <label for="stock" class="form-label">Stock</label>
+                <input type="number" class="form-control" id="stock" name="stock" min="0"
+                       value="<?php echo (int)$stock; ?>">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="imagen_url" class="form-label">URL de imagen</label>
+            <input type="url" class="form-control" id="imagen_url" name="imagen_url"
+                   value="<?php echo htmlspecialchars($imagen_url); ?>" placeholder="https://...">
+        </div>
+        <div class="mb-3">
+            <label for="tallas_disponibles" class="form-label">Tallas disponibles</label>
+            <input type="text" class="form-control" id="tallas_disponibles" name="tallas_disponibles"
+                   value="<?php echo htmlspecialchars($tallas_disponibles); ?>"
+                   placeholder="Ej: S, M, L, XL">
+        </div>
+        <div class="mb-4">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="activo" id="activo" value="1" <?php echo $activo ? 'checked' : ''; ?>>
+                <label class="form-check-label" for="activo">Activo (visible en tienda)</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="portada" id="portada" value="1" <?php echo $portada ? 'checked' : ''; ?>>
+                <label class="form-check-label" for="portada">Mostrar en portada</label>
+            </div>
+        </div>
+        <div class="gap-4 text-center">
+            <button type="submit" class="btn btn-dark" id="btn-submit"<?php echo $isEdit ? ' disabled' : ''; ?>><?php echo $isEdit ? 'Guardar cambios' : 'Crear producto'; ?></button>
+            <a href="<?php echo BASE_URL; ?>/admin" class="btn btn-dark">Cancelar</a>
+        </div>
+    </form>
+    </div>
+</div>
+
+<?php if ($isEdit): ?>
+<script>
+(function() {
+    var form = document.getElementById('form-producto');
+    var btn = document.getElementById('btn-submit');
+    if (!form || !btn) return;
+
+    function val(el) {
+        if (!el) return '';
+        if (el.type === 'checkbox') return el.checked ? '1' : '0';
+        return (el.value || '').trim();
+    }
+
+    function numVal(el) {
+        var v = val(el).replace(',', '.');
+        return isNaN(parseFloat(v)) ? '' : parseFloat(v).toString();
+    }
+
+    var initial = {
+        nombre: val(form.nombre),
+        descripcion: val(form.descripcion),
+        categoria: val(form.categoria),
+        precio: numVal(form.precio) || val(form.precio),
+        stock: val(form.stock),
+        imagen_url: val(form.imagen_url),
+        tallas_disponibles: val(form.tallas_disponibles),
+        activo: val(form.activo),
+        portada: val(form.portada)
+    };
+
+    function checkChanges() {
+        var current = {
+            nombre: val(form.nombre),
+            descripcion: val(form.descripcion),
+            categoria: val(form.categoria),
+            precio: numVal(form.precio) || val(form.precio),
+            stock: val(form.stock),
+            imagen_url: val(form.imagen_url),
+            tallas_disponibles: val(form.tallas_disponibles),
+            activo: val(form.activo),
+            portada: val(form.portada)
+        };
+        var changed = false;
+        for (var k in initial) {
+            if (initial[k] !== current[k]) { changed = true; break; }
+        }
+        btn.disabled = !changed;
+    }
+
+    form.addEventListener('input', checkChanges);
+    form.addEventListener('change', checkChanges);
+})();
+</script>
+<?php endif; ?>

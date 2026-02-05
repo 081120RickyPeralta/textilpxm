@@ -1,0 +1,10 @@
+/* Admin: solo lo que Bootstrap no cubre */
+
+body {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Espacio para el nav fijo (como la página principal) */
+.admin-main-offset {
+    padding-top: calc(3.5rem + 1.5rem);
+}

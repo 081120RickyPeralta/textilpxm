@@ -32,30 +32,41 @@ class Router {
             'logout' => 'logout'
         ];
         
-        // Establecer el controlador (se convierte a formato PascalCase con primera letra mayúscula)
-        if (!empty($urlParts[0])) {
-            $firstPart = $urlParts[0];
-            
-            // Si es una ruta especial del HomeController, usar HomeController
-            if (isset($homeRoutes[$firstPart])) {
-                $this->controllerName = 'HomeController';
-                $this->methodName = $homeRoutes[$firstPart];
-                unset($urlParts[0]);
-            } else {
-                // Intentar buscar un controlador específico
-                $this->controllerName = ucfirst($firstPart) . 'Controller';
-                unset($urlParts[0]);
+        // Panel de administración: /admin, /admin/login, /admin/productos, etc.
+        if (!empty($urlParts[0]) && $urlParts[0] === 'admin') {
+            $this->controllerName = 'AdminController';
+            unset($urlParts[0]);
+            $this->methodName = !empty($urlParts[1]) ? $urlParts[1] : 'index';
+            if (!empty($urlParts[1])) {
+                unset($urlParts[1]);
             }
+            $this->params = $urlParts ? array_values($urlParts) : [];
+        } else {
+            // Establecer el controlador (se convierte a formato PascalCase con primera letra mayúscula)
+            if (!empty($urlParts[0])) {
+                $firstPart = $urlParts[0];
+                
+                // Si es una ruta especial del HomeController, usar HomeController
+                if (isset($homeRoutes[$firstPart])) {
+                    $this->controllerName = 'HomeController';
+                    $this->methodName = $homeRoutes[$firstPart];
+                    unset($urlParts[0]);
+                } else {
+                    // Intentar buscar un controlador específico
+                    $this->controllerName = ucfirst($firstPart) . 'Controller';
+                    unset($urlParts[0]);
+                }
+            }
+            
+            // Establecer el método solo si no se estableció desde las rutas especiales
+            if ($this->methodName === 'index' && !empty($urlParts[1])) {
+                $this->methodName = $urlParts[1];
+                unset($urlParts[1]);
+            }
+            
+            // Obtener parámetros
+            $this->params = $urlParts ? array_values($urlParts) : [];
         }
-        
-        // Establecer el método solo si no se estableció desde las rutas especiales
-        if ($this->methodName === 'index' && !empty($urlParts[1])) {
-            $this->methodName = $urlParts[1];
-            unset($urlParts[1]);
-        }
-        
-        // Obtener parámetros
-        $this->params = $urlParts ? array_values($urlParts) : [];
 
         // Verificar si el controlador existe
         $controllerFile = APP_PATH . '/controllers/' . $this->controllerName . '.php';

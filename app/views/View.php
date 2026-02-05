@@ -6,9 +6,12 @@
 
 class View {
     /**
-     * Renderizar una vista con el layout principal
+     * Renderizar una vista con layout
+     * @param string $view Ruta de la vista (ej: home/index)
+     * @param array $data Datos para la vista
+     * @param string|null $layout Nombre del layout (main, admin) o null para sin layout
      */
-    public function render($view, $data = []) {
+    public function render($view, $data = [], $layout = 'main') {
         // Extraer datos a variables individuales
         extract($data);
 
@@ -21,8 +24,13 @@ class View {
             require_once $viewFile;
             $content = ob_get_clean();
 
-            // Incluir el layout principal
-            $layoutFile = APP_PATH . '/views/layouts/main.php';
+            if ($layout === null) {
+                echo $content;
+                return;
+            }
+
+            // Incluir el layout
+            $layoutFile = APP_PATH . '/views/layouts/' . $layout . '.php';
             if (file_exists($layoutFile)) {
                 require_once $layoutFile;
             } else {

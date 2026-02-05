@@ -56,18 +56,8 @@ $metaContent = loadContent('meta');
                         <i class="bi bi-search"></i>
                     </button>
                 </form>
-                <?php if (isset($_SESSION['user_id'])): ?>
-                    <a href="<?php echo BASE_URL; ?>/products" class="btn btn-success small px-3 py-2">
-                        <i class="bi bi-box-seam me-1"></i><?php echo htmlspecialchars(getContent($navbarContent, 'user.gestion', 'Gestión')); ?>
-                    </a>
-                    <div class="ms-2">
-                        <span class="navbar-text me-2 text-dark">
-                            <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['user_name'] ?? 'Usuario'); ?>
-                        </span>
-                        <a class="btn btn-sm btn-outline-secondary" href="<?php echo BASE_URL; ?>/logout">
-                            <i class="bi bi-box-arrow-right"></i> <?php echo htmlspecialchars(getContent($navbarContent, 'user.salir', 'Salir')); ?>
-                        </a>
-                    </div>
+                <?php if (!empty($_SESSION['user_id']) && ($_SESSION['user_rol'] ?? '') === 'admin'): ?>
+                    <a href="<?php echo BASE_URL; ?>/admin" class="btn btn-outline-secondary btn-sm"><i class="bi bi-gear me-1"></i>Admin</a>
                 <?php endif; ?>
             </div>
         </div>

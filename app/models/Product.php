@@ -52,7 +52,7 @@ class Product extends Model {
     }
 
     /**
-     * Obtener todas las categorías únicas
+     * Obtener todas las categorías únicas (solo productos activos)
      * @return array Array de nombres de categorías
      */
     public function getCategories() {
@@ -68,6 +68,24 @@ class Product extends Model {
                 }
             }
             
+            return $categories;
+        } catch (Exception $e) {
+            return [];
+        }
+    }
+
+    /**
+     * Obtener todas las categorías únicas (todos los productos, para admin)
+     * @return array Array de nombres de categorías
+     */
+    public function getCategoriesAll() {
+        try {
+            $sql = "SELECT DISTINCT categoria FROM " . $this->table . " WHERE categoria IS NOT NULL AND categoria != '' ORDER BY categoria";
+            $result = $this->fetchAll($sql);
+            $categories = [];
+            foreach ($result as $row) {
+                $categories[] = $row['categoria'];
+            }
             return $categories;
         } catch (Exception $e) {
             return [];
