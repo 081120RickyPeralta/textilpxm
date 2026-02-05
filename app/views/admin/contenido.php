@@ -4,9 +4,7 @@ $whatsapp_number = $whatsapp_number ?? '';
 $v = function($key) use ($c) { return htmlspecialchars($c[$key] ?? '', ENT_QUOTES, 'UTF-8'); };
 ?>
 
-
-
-<div class="card shadow-sm mb-4" style="margin-top: 3rem;">
+<div class="card shadow-sm mb-4" style="margin-top: 6rem;">
     <div class="card-header bg-dark text-white">
         <h1 class="h5 mb-0">Textos y datos del sitio</h1>
     </div>

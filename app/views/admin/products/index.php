@@ -131,7 +131,7 @@ if (!empty($products)) {
                             </td>
                             <td class="text-end text-nowrap">
                                 <a href="<?php echo BASE_URL; ?>/admin/editar/<?php echo (int)$p['id']; ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square me-1"></i>Editar</a>
-                                <a href="<?php echo BASE_URL; ?>/admin/eliminar/<?php echo (int)$p['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Eliminar este producto? Se marcará como inactivo.');"><i class="bi bi-trash me-1"></i>Eliminar</a>
+                                <a href="<?php echo BASE_URL; ?>/admin/eliminar/<?php echo (int)$p['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirmarEliminar(this.href, 'eliminar');"><i class="bi bi-trash me-1"></i>Eliminar</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

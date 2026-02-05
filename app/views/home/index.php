@@ -57,7 +57,7 @@ $homeContent = loadContent('home');
 
 <!-- Hero -->
 <section id="inicio" class="hero d-flex align-items-center overflow-hidden">
-    <img src="https://images.unsplash.com/photo-1584908181003-9129cbb45bcd?q=80&w=2070" alt="Playa de Puerto Escondido, Oaxaca" class="hero-bg">
+    <img src="<?php echo ASSETS_URL; ?>/images/page/banner.jpg" alt="Banner principal" class="hero-bg">
     <div class="hero-overlay"></div>
     <div class="container">
         <div class="text-white" style="max-width: 700px;">
@@ -127,7 +127,7 @@ $homeContent = loadContent('home');
     <div class="container">
         <div class="row align-items-center g-5">
             <div class="col-lg-6">
-                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=800" alt="Artesanas Oaxaqueñas" class="img-fluid rounded" style="height: 400px; object-fit: cover;">
+                <img src="<?php echo ASSETS_URL; ?>/images/page/empresarial.jpg" class="img-fluid rounded" style="height: 400px; object-fit: cover;">
             </div>
             <div class="col-lg-6">
                 <p class="small text-uppercase mb-2 text-success"><?php echo htmlspecialchars(getContent($homeContent, 'about.badge', 'Nuestra Historia')); ?></p>

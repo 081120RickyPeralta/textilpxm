@@ -19,7 +19,7 @@ $tallas_array = array_filter(array_map('trim', explode(',', $tallas_disponibles)
     </div>
 <?php endif; ?>
 
-<div class="card shadow-sm mx-auto mb-4" style="max-width: 720px; margin-top: 3rem;">
+<div class="card shadow-sm mx-auto mb-4" style="max-width: 720px; margin-top: 6rem;">
     <div class="card-body p-4">
     <h1 class="h4 fw-bold mb-3 text-center"><?php echo $isEdit ? 'Editar producto' : 'Nuevo producto'; ?></h1>
     <form method="post" action="<?php echo $formAction; ?>" id="form-producto">
