@@ -17,6 +17,53 @@ class AdminController extends Controller {
         $this->siteContentModel = new SiteContent();
     }
 
+    /** Extensiones y MIME permitidos para imágenes de productos */
+    private static $productImageTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+
+    /**
+     * Subir imagen de producto. Guarda en public/images/productos como {id}.{ext}
+     * @param string $inputName Nombre del input file (ej: 'imagen')
+     * @param int $productId ID del producto
+     * @return string Ruta relativa para BD (ej: 'productos/1.jpg') o ''
+     */
+    private function uploadProductImage($inputName, $productId) {
+        if (empty($_FILES[$inputName]['tmp_name']) || $_FILES[$inputName]['error'] !== UPLOAD_ERR_OK) {
+            return '';
+        }
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mime = finfo_file($finfo, $_FILES[$inputName]['tmp_name']);
+        finfo_close($finfo);
+        if (!in_array($mime, self::$productImageTypes, true)) {
+            return '';
+        }
+        $ext = (new SplFileInfo($_FILES[$inputName]['name']))->getExtension();
+        $ext = preg_replace('/[^a-z0-9]/i', '', $ext) ?: 'jpg';
+        $dir = PUBLIC_PATH . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . 'productos';
+        if (!is_dir($dir)) {
+            @mkdir($dir, 0755, true);
+        }
+        $dest = $dir . DIRECTORY_SEPARATOR . $productId . '.' . $ext;
+        if (!move_uploaded_file($_FILES[$inputName]['tmp_name'], $dest)) {
+            return '';
+        }
+        return 'productos/' . $productId . '.' . $ext;
+    }
+
+    /**
+     * Eliminar archivo físico de imagen de producto si es ruta local (productos/...)
+     * @param string $imagenUrl Valor de imagen_url en BD
+     */
+    private function deleteProductImageFile($imagenUrl) {
+        $imagenUrl = trim($imagenUrl ?? '');
+        if ($imagenUrl === '' || strpos($imagenUrl, 'productos/') !== 0) {
+            return;
+        }
+        $path = PUBLIC_PATH . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $imagenUrl);
+        if (is_file($path)) {
+            @unlink($path);
+        }
+    }
+
     /**
      * Comprobar que el usuario está logueado y es admin
      */
@@ -159,7 +206,7 @@ class AdminController extends Controller {
             'categoria' => trim($_POST['categoria'] ?? ''),
             'precio' => (float) (str_replace(',', '.', $_POST['precio'] ?? 0)),
             'stock' => (int) ($_POST['stock'] ?? 0),
-            'imagen_url' => trim($_POST['imagen_url'] ?? ''),
+            'imagen_url' => '',
             'activo' => isset($_POST['activo']) ? 1 : 0,
             'portada' => isset($_POST['portada']) ? 1 : 0,
             'tallas_disponibles' => trim($_POST['tallas_disponibles'] ?? ''),
@@ -181,6 +228,10 @@ class AdminController extends Controller {
         try {
             $id = $this->productModel->create($data);
             if ($id) {
+                $uploaded = $this->uploadProductImage('imagen', $id);
+                if ($uploaded !== '') {
+                    $this->productModel->update($id, array_merge($data, ['imagen_url' => $uploaded]));
+                }
                 $this->redirectWithMessage('/admin', 'Producto creado correctamente', 'success');
             } else {
                 $this->redirectWithMessage('/admin/crear', 'Error al crear el producto', 'danger');
@@ -232,13 +283,19 @@ class AdminController extends Controller {
             return;
         }
 
+        $product = $this->productModel->getById($id);
+        if (!$product) {
+            $this->redirectWithMessage('/admin', 'Producto no encontrado', 'danger');
+            return;
+        }
+
         $data = [
             'nombre' => trim($_POST['nombre'] ?? ''),
             'descripcion' => trim($_POST['descripcion'] ?? ''),
             'categoria' => trim($_POST['categoria'] ?? ''),
             'precio' => (float) (str_replace(',', '.', $_POST['precio'] ?? 0)),
             'stock' => (int) ($_POST['stock'] ?? 0),
-            'imagen_url' => trim($_POST['imagen_url'] ?? ''),
+            'imagen_url' => $product['imagen_url'] ?? '',
             'activo' => isset($_POST['activo']) ? 1 : 0,
             'portada' => isset($_POST['portada']) ? 1 : 0,
             'tallas_disponibles' => trim($_POST['tallas_disponibles'] ?? ''),
@@ -255,6 +312,12 @@ class AdminController extends Controller {
         if ($data['precio'] <= 0) {
             $this->redirectWithMessage('/admin/editar/' . $id, 'El precio debe ser mayor que 0', 'danger');
             return;
+        }
+
+        $uploaded = $this->uploadProductImage('imagen', $id);
+        if ($uploaded !== '') {
+            $this->deleteProductImageFile($product['imagen_url'] ?? '');
+            $data['imagen_url'] = $uploaded;
         }
 
         try {
@@ -441,6 +504,7 @@ class AdminController extends Controller {
             $this->redirectWithMessage('/admin', 'Producto no encontrado', 'danger');
             return;
         }
+        $this->deleteProductImageFile($product['imagen_url'] ?? '');
         try {
             $this->productModel->delete($id);
             $this->redirectWithMessage('/admin', 'Producto eliminado correctamente', 'success');

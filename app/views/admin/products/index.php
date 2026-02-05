@@ -102,11 +102,7 @@ if (!empty($products)) {
                         <tr data-nombre="<?php echo htmlspecialchars($p['nombre'], ENT_QUOTES, 'UTF-8'); ?>" data-categoria="<?php echo htmlspecialchars($p['categoria'], ENT_QUOTES, 'UTF-8'); ?>" data-precio="<?php echo (float)$p['precio']; ?>" data-stock="<?php echo (int)($p['stock'] ?? 0); ?>" data-portada="<?php echo !empty($p['portada']) ? '1' : '0'; ?>" data-activo="<?php echo !empty($p['activo']) ? '1' : '0'; ?>">
                             <td>
                                 <div class="d-flex align-items-center gap-2">
-                                    <?php if (!empty($p['imagen_url'])): ?>
-                                        <img src="<?php echo htmlspecialchars($p['imagen_url']); ?>" alt="" class="rounded object-fit-cover" width="48" height="48" loading="lazy">
-                                    <?php else: ?>
-                                        <div class="rounded bg-secondary bg-opacity-25 d-flex align-items-center justify-content-center text-muted small" style="width:48px;height:48px">—</div>
-                                    <?php endif; ?>
+                                    <img src="<?php echo htmlspecialchars(productImageUrl($p['imagen_url'] ?? '')); ?>" alt="" class="rounded object-fit-cover" width="48" height="48" loading="lazy">
                                     <div>
                                         <span class="fw-medium"><?php echo htmlspecialchars($p['nombre']); ?></span>
                                     </div>

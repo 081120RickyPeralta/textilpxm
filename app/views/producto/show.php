@@ -97,10 +97,9 @@ if (empty($product) || !isset($product['id'])) {
             <!-- Imagen del producto -->
             <div class="col-lg-6">
                 <div class="product-detail-image-container rounded shadow">
-                    <img src="<?php echo htmlspecialchars($product['imagen_url'] ?: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=800'); ?>" 
-                         alt="<?php echo htmlspecialchars($product['nombre']); ?>" 
-                         class="product-detail-image rounded"
-                         onerror="this.src='https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=800'">
+<img src="<?php echo htmlspecialchars(productImageUrl($product['imagen_url'] ?? '')); ?>"
+                         alt="<?php echo htmlspecialchars($product['nombre']); ?>"
+                         class="product-detail-image rounded">
                 </div>
             </div>
             
@@ -172,11 +171,10 @@ if (empty($product) || !isset($product['id'])) {
                     <?php foreach ($relatedProducts as $related): ?>
                         <div class="col-md-6 col-lg-3">
                             <div class="card shadow-sm h-100" style="cursor: pointer;" onclick="window.location.href='<?php echo BASE_URL; ?>/producto/<?php echo $related['id']; ?>'">
-                                <img src="<?php echo htmlspecialchars($related['imagen_url'] ?: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=800'); ?>" 
-                                     alt="<?php echo htmlspecialchars($related['nombre']); ?>" 
+<img src="<?php echo htmlspecialchars(productImageUrl($related['imagen_url'] ?? '')); ?>"
+                                     alt="<?php echo htmlspecialchars($related['nombre']); ?>"
                                      class="card-img-top"
-                                     style="height: 320px; object-fit: cover;"
-                                     onerror="this.src='https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=800'">
+                                     style="height: 320px; object-fit: cover;">
                                 <div class="card-body">
                                     <span class="small text-uppercase text-muted d-block mb-2"><?php echo htmlspecialchars($related['categoria']); ?></span>
                                     <h3 class="h5 mb-2"><?php echo htmlspecialchars($related['nombre']); ?></h3>

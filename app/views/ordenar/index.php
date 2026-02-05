@@ -83,10 +83,9 @@ $allProducts = $allProducts ?? [];
                     <?php if ($selectedProduct): ?>
                         <div class="col-lg-4 d-flex">
                             <div class="card shadow-sm p-4 bg-light h-100 w-100">
-                                <img src="<?php echo htmlspecialchars($selectedProduct['imagen_url'] ?: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=800'); ?>" 
-                                     alt="<?php echo htmlspecialchars($selectedProduct['nombre']); ?>" 
-                                     class="product-preview-image rounded shadow mb-3"
-                                     onerror="this.src='https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=800'">
+<img src="<?php echo htmlspecialchars(productImageUrl($selectedProduct['imagen_url'] ?? '')); ?>"
+                                     alt="<?php echo htmlspecialchars($selectedProduct['nombre']); ?>"
+                                     class="product-preview-image rounded shadow mb-3">
                                 <div class="small text-uppercase text-muted mb-2"><?php echo htmlspecialchars($selectedProduct['categoria']); ?></div>
                                 <h3 class="h3 mb-2"><?php echo htmlspecialchars($selectedProduct['nombre']); ?></h3>
                                 <p class="h4 fw-semibold text-success mb-3">$<?php echo number_format($selectedProduct['precio'], 2); ?> MXN</p>

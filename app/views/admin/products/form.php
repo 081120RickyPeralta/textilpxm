@@ -22,7 +22,7 @@ $tallas_array = array_filter(array_map('trim', explode(',', $tallas_disponibles)
 <div class="card shadow-sm mx-auto mb-4" style="max-width: 720px; margin-top: 6rem;">
     <div class="card-body p-4">
     <h1 class="h4 fw-bold mb-3 text-center"><?php echo $isEdit ? 'Editar producto' : 'Nuevo producto'; ?></h1>
-    <form method="post" action="<?php echo $formAction; ?>" id="form-producto">
+    <form method="post" action="<?php echo $formAction; ?>" id="form-producto" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="nombre" class="form-label">Nombre <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="nombre" name="nombre" required
@@ -57,9 +57,14 @@ $tallas_array = array_filter(array_map('trim', explode(',', $tallas_disponibles)
             </div>
         </div>
         <div class="mb-3">
-            <label for="imagen_url" class="form-label">URL de imagen</label>
-            <input type="url" class="form-control" id="imagen_url" name="imagen_url"
-                   value="<?php echo htmlspecialchars($imagen_url); ?>" placeholder="https://...">
+            <label for="imagen" class="form-label">Imagen del producto</label>
+            <?php if ($isEdit): ?>
+                <div class="mb-2">
+                    <img id="preview-imagen" src="<?php echo htmlspecialchars(productImageUrl($imagen_url)); ?>" alt="Vista previa" class="img-thumbnail" style="max-height: 120px;">
+                </div>
+            <?php endif; ?>
+            <input type="file" class="form-control" id="imagen" name="imagen" accept="image/jpeg,image/png,image/webp,image/gif">
+            <small class="text-muted">Formatos: JPG, PNG, WebP, GIF. En edición, sube una nueva imagen solo si quieres reemplazarla.</small>
         </div>
         <div class="mb-3">
             <label class="form-label">Tallas disponibles</label>
@@ -178,7 +183,7 @@ $tallas_array = array_filter(array_map('trim', explode(',', $tallas_disponibles)
         categoria: val(form.categoria),
         precio: numVal(form.precio) || val(form.precio),
         stock: val(form.stock),
-        imagen_url: val(form.imagen_url),
+        imagen: form.imagen && form.imagen.files ? form.imagen.files.length : 0,
         tallas_disponibles: val(form.tallas_disponibles),
         activo: val(form.activo),
         portada: val(form.portada)
@@ -191,7 +196,7 @@ $tallas_array = array_filter(array_map('trim', explode(',', $tallas_disponibles)
             categoria: val(form.categoria),
             precio: numVal(form.precio) || val(form.precio),
             stock: val(form.stock),
-            imagen_url: val(form.imagen_url),
+            imagen: form.imagen && form.imagen.files ? form.imagen.files.length : 0,
             tallas_disponibles: val(form.tallas_disponibles),
             activo: val(form.activo),
             portada: val(form.portada)

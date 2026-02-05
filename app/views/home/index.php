@@ -94,11 +94,11 @@ $homeContent = loadContent('home');
                 <?php foreach ($products as $product): ?>
                     <div class="col-md-6 col-lg-4 ">
                         <div class="bg-light rounded card product-card h-100 border shadow-sm cursor-pointer" onclick="window.location.href='<?php echo BASE_URL; ?>/producto/<?php echo $product['id']; ?>'">
-                            <img src="<?php echo htmlspecialchars($product['imagen_url'] ?: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=800'); ?>"
+                            <img src="<?php echo htmlspecialchars(productImageUrl($product['imagen_url'] ?? '')); ?>"
                                 alt="<?php echo htmlspecialchars($product['nombre']); ?>"
                                 class="card-img-top"
                                 style="height: 320px; object-fit: cover;"
-                                onerror="this.src='https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=800'">
+                                loading="lazy">
                             <div class="card-body">
                                 <span class="small text-uppercase d-block mb-2 text-muted"><?php echo htmlspecialchars($product['categoria']); ?></span>
                                 <h3 class="h5 mb-2"><?php echo htmlspecialchars($product['nombre']); ?></h3>

@@ -9,20 +9,17 @@
  */
 if (!function_exists('renderProductCard')) {
     function renderProductCard($product) {
-        $imageUrl = !empty($product['imagen_url']) 
-            ? htmlspecialchars($product['imagen_url'], ENT_QUOTES, 'UTF-8')
-            : 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=800';
+        $imageUrl = productImageUrl($product['imagen_url'] ?? '');
         
         $productUrl = BASE_URL . '/producto/' . (int)$product['id'];
         ?>
         <div class="col-md-6 col-lg-4">
             <div class="card shadow-sm h-100" style="cursor: pointer;" onclick="window.location.href='<?php echo $productUrl; ?>'">
-                <img src="<?php echo $imageUrl; ?>" 
-                     alt="<?php echo htmlspecialchars($product['nombre'], ENT_QUOTES, 'UTF-8'); ?>" 
+<img src="<?php echo htmlspecialchars($imageUrl, ENT_QUOTES, 'UTF-8'); ?>"
+                     alt="<?php echo htmlspecialchars($product['nombre'], ENT_QUOTES, 'UTF-8'); ?>"
                      class="card-img-top"
                      style="height: 320px; object-fit: cover;"
-                     loading="lazy"
-                     onerror="this.src='https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=800'">
+                     loading="lazy">
                 <div class="card-body">
                     <span class="small text-uppercase text-muted d-block mb-2"><?php echo htmlspecialchars($product['categoria'], ENT_QUOTES, 'UTF-8'); ?></span>
                     <h3 class="h5 mb-2"><?php echo htmlspecialchars($product['nombre'], ENT_QUOTES, 'UTF-8'); ?></h3>

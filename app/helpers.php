@@ -54,3 +54,22 @@ function getContent($data, $key, $default = '') {
     
     return $value;
 }
+
+/**
+ * URL completa para la imagen de un producto.
+ * Si imagen_url es ruta local (ej. productos/1.jpg), devuelve ASSETS_URL/images/...
+ * Si es URL externa (http...), la devuelve tal cual.
+ * @param string $imagen_url Valor de producto['imagen_url']
+ * @param string $default URL por defecto si está vacío
+ * @return string
+ */
+function productImageUrl($imagen_url, $default = '') {
+    $imagen_url = trim($imagen_url ?? '');
+    if ($imagen_url === '') {
+        return $default !== '' ? $default : (ASSETS_URL . '/images/productos/placeholder.svg');
+    }
+    if (preg_match('#^https?://#i', $imagen_url)) {
+        return $imagen_url;
+    }
+    return ASSETS_URL . '/images/' . $imagen_url;
+}
