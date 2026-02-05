@@ -1,4 +1,4 @@
-<h1 class="h4 fw-bold text-center" style="margin-top: 3rem;">Productos</h1>
+<h1 class="h4 fw-bold text-center" style="margin-top: 6rem;">Productos</h1>
 
 <?php
 $categorias_disponibles = [];
@@ -22,7 +22,7 @@ if (!empty($products)) {
     </a>
 </div>
 
-<div class="card shadow-sm">
+<div class="card shadow-sm mb-4">
     <?php if (empty($products)): ?>
         <div class="card-body text-center py-5 text-muted">
             <p class="fw-bold mb-2">No hay productos</p>

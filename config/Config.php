@@ -35,10 +35,18 @@ if ($isFilesystemPath && !empty($_SERVER['DOCUMENT_ROOT']) && !empty($_SERVER['S
 }
 $baseUrl = rtrim($baseUrl, '/');
 // Quitar /public de la URL para que los enlaces sean sin "public" (ej. /textilpxm/admin)
-$baseUrl = preg_replace('#/public$#', '', $baseUrl);
+define('BASE_URL', preg_replace('#/public$#', '', $baseUrl));
 
-define('BASE_URL', $baseUrl);
-define('ASSETS_URL', BASE_URL);
+// ASSETS_URL: URL base para css, js, imágenes (carpeta public). Se calcula desde DOCUMENT_ROOT para que funcione con cualquier nivel de carpetas.
+$docRoot = str_replace('\\', '/', rtrim($_SERVER['DOCUMENT_ROOT'] ?? '', '/\\'));
+$publicPath = str_replace('\\', '/', realpath(PUBLIC_PATH) ?: PUBLIC_PATH);
+$docRootReal = str_replace('\\', '/', realpath($docRoot) ?: $docRoot);
+$assetsPath = '';
+if ($docRootReal !== '' && strpos($publicPath, $docRootReal) === 0) {
+    $assetsPath = substr($publicPath, strlen($docRootReal));
+    $assetsPath = '/' . trim(str_replace('\\', '/', $assetsPath), '/');
+}
+define('ASSETS_URL', ($assetsPath !== '' ? $protocol . '://' . $host . $assetsPath : BASE_URL . '/public'));
 
 // Configuración de la base de datos
 define('DB_HOST', 'localhost');
