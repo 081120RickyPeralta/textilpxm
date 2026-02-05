@@ -31,8 +31,9 @@ class HomeController extends Controller {
         // Obtener todos los productos activos para el formulario de pedidos
         $allProducts = $this->productModel->getActive();
         
+        $metaContent = loadContent('meta');
         $data = [
-            'page_title' => 'Oaxaca Textiles | Ropa Típica de Puerto Escondido',
+            'page_title' => getContent($metaContent, 'site.name', 'Oaxaca Textiles | Ropa Típica de Puerto Escondido'),
             'products' => $products ?: [],
             'allProducts' => $allProducts ?: [],
             'categories' => $categories ?: []

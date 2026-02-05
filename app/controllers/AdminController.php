@@ -280,10 +280,10 @@ class AdminController extends Controller {
             $keys = [
                 'navbar_brand', 'footer_brand', 'footer_description',
                 'footer_contact_title', 'footer_contact_street', 'footer_contact_city', 'footer_contact_phone', 'footer_contact_email',
-                'footer_schedule_title', 'footer_schedule_days', 'footer_schedule_hours',
+                'footer_schedule_title', 'footer_schedule_days', 'footer_schedule_hours', 'footer_schedule_days_2', 'footer_schedule_hours_2',
                 'footer_social_facebook', 'footer_social_instagram', 'footer_social_whatsapp',
                 'footer_copyright_text', 'footer_copyright_made_with',
-                'meta_site_name', 'meta_site_default_title', 'meta_site_description', 'meta_site_location',
+                'meta_site_name', 'meta_site_description', 'meta_site_location',
                 'home_hero_location', 'home_hero_title', 'home_hero_description',
                 'home_collection_title', 'home_collection_description', 'home_collection_no_products',
                 'home_about_badge', 'home_about_title', 'home_about_description1', 'home_about_description2',
@@ -349,6 +349,8 @@ class AdminController extends Controller {
             $flat['footer_schedule_title'] = $f['schedule']['title'] ?? '';
             $flat['footer_schedule_days'] = $f['schedule']['weekdays']['days'] ?? '';
             $flat['footer_schedule_hours'] = $f['schedule']['weekdays']['hours'] ?? '';
+            $flat['footer_schedule_days_2'] = $f['schedule']['extra']['days'] ?? '';
+            $flat['footer_schedule_hours_2'] = $f['schedule']['extra']['hours'] ?? '';
             $flat['footer_social_facebook'] = $f['social']['facebook'] ?? '';
             $flat['footer_social_instagram'] = $f['social']['instagram'] ?? '';
             $flat['footer_social_whatsapp'] = $f['social']['whatsapp'] ?? '';
@@ -358,7 +360,6 @@ class AdminController extends Controller {
         if (!empty($data['meta']['site'])) {
             $s = $data['meta']['site'];
             $flat['meta_site_name'] = $s['name'] ?? '';
-            $flat['meta_site_default_title'] = $s['default_title'] ?? '';
             $flat['meta_site_description'] = $s['description'] ?? '';
             $flat['meta_site_location'] = $s['location'] ?? '';
         }

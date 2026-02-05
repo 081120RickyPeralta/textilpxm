@@ -9,7 +9,7 @@ $metaContent = loadContent('meta');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title><?php echo $page_title ?? getContent($metaContent, 'site.default_title', 'Oaxaca Textiles'); ?></title>
+    <title><?php echo $page_title ?? getContent($metaContent, 'site.name', 'Oaxaca Textiles'); ?></title>
     <meta name="description" content="<?php echo htmlspecialchars(getContent($metaContent, 'site.description', '')); ?>">
     
     <!-- Bootstrap 5 CSS -->
@@ -76,17 +76,31 @@ $metaContent = loadContent('meta');
                     <p class="small text-white-50">
                         <?php echo htmlspecialchars(getContent($footerContent, 'description', '')); ?>
                     </p>
+                    <?php
+                    $fb = trim(getContent($footerContent, 'social.facebook', ''));
+                    $ig = trim(getContent($footerContent, 'social.instagram', ''));
+                    $wa = trim(getContent($footerContent, 'social.whatsapp', ''));
+                    $hasSocial = ($fb !== '' && $fb !== '#') || ($ig !== '' && $ig !== '#') || ($wa !== '' && $wa !== '#');
+                    if ($hasSocial):
+                    ?>
                     <div class="mt-3">
-                        <a href="<?php echo htmlspecialchars(getContent($footerContent, 'social.facebook', '#')); ?>" class="d-inline-flex align-items-center justify-content-center rounded-circle border border-white border-opacity-25 text-white-50 text-decoration-none me-2" style="width: 40px; height: 40px;">
+                        <?php if ($fb !== '' && $fb !== '#'): ?>
+                        <a href="<?php echo htmlspecialchars($fb); ?>" class="d-inline-flex align-items-center justify-content-center rounded-circle border border-white border-opacity-25 text-white-50 text-decoration-none me-2" style="width: 40px; height: 40px;">
                             <i class="bi bi-facebook"></i>
                         </a>
-                        <a href="<?php echo htmlspecialchars(getContent($footerContent, 'social.instagram', '#')); ?>" class="d-inline-flex align-items-center justify-content-center rounded-circle border border-white border-opacity-25 text-white-50 text-decoration-none me-2" style="width: 40px; height: 40px;">
+                        <?php endif; ?>
+                        <?php if ($ig !== '' && $ig !== '#'): ?>
+                        <a href="<?php echo htmlspecialchars($ig); ?>" class="d-inline-flex align-items-center justify-content-center rounded-circle border border-white border-opacity-25 text-white-50 text-decoration-none me-2" style="width: 40px; height: 40px;">
                             <i class="bi bi-instagram"></i>
                         </a>
-                        <a href="<?php echo htmlspecialchars(getContent($footerContent, 'social.whatsapp', '#')); ?>" class="d-inline-flex align-items-center justify-content-center rounded-circle border border-white border-opacity-25 text-white-50 text-decoration-none me-2" style="width: 40px; height: 40px;">
+                        <?php endif; ?>
+                        <?php if ($wa !== '' && $wa !== '#'): ?>
+                        <a href="<?php echo htmlspecialchars($wa); ?>" class="d-inline-flex align-items-center justify-content-center rounded-circle border border-white border-opacity-25 text-white-50 text-decoration-none me-2" style="width: 40px; height: 40px;">
                             <i class="bi bi-whatsapp"></i>
                         </a>
+                        <?php endif; ?>
                     </div>
+                    <?php endif; ?>
                 </div>
                 <div class="col-lg-2 col-md-4">
                     <h5 class="h6 fw-semibold mb-4">Navegación</h5>
@@ -100,19 +114,43 @@ $metaContent = loadContent('meta');
                 <div class="col-lg-3 col-md-4">
                     <h5 class="h6 fw-semibold mb-4"><?php echo htmlspecialchars(getContent($footerContent, 'contact.title', 'Contacto')); ?></h5>
                     <ul class="list-unstyled">
+                        <?php if (trim(getContent($footerContent, 'contact.address.street', '')) !== ''): ?>
                         <li class="mb-2 small text-white-50"><i class="bi bi-geo-alt me-2"></i><?php echo htmlspecialchars(getContent($footerContent, 'contact.address.street', '')); ?></li>
+                        <?php endif; ?>
+                        <?php if (trim(getContent($footerContent, 'contact.address.city', '')) !== ''): ?>
                         <li class="mb-2 small text-white-50"><?php echo htmlspecialchars(getContent($footerContent, 'contact.address.city', '')); ?></li>
+                        <?php endif; ?>
+                        <?php if (trim(getContent($footerContent, 'contact.phone', '')) !== ''): ?>
                         <li class="mb-2 small text-white-50"><i class="bi bi-telephone me-2"></i><?php echo htmlspecialchars(getContent($footerContent, 'contact.phone', '')); ?></li>
+                        <?php endif; ?>
+                        <?php if (trim(getContent($footerContent, 'contact.email', '')) !== ''): ?>
                         <li class="mb-2 small text-white-50"><i class="bi bi-envelope me-2"></i><?php echo htmlspecialchars(getContent($footerContent, 'contact.email', '')); ?></li>
+                        <?php endif; ?>
                     </ul>
                 </div>
+                <?php
+                $scheduleTitle = trim(getContent($footerContent, 'schedule.title', ''));
+                $scheduleDays = trim(getContent($footerContent, 'schedule.weekdays.days', ''));
+                $scheduleHours = trim(getContent($footerContent, 'schedule.weekdays.hours', ''));
+                $scheduleDays2 = trim(getContent($footerContent, 'schedule.extra.days', ''));
+                $scheduleHours2 = trim(getContent($footerContent, 'schedule.extra.hours', ''));
+                $hasSchedule = $scheduleTitle !== '' || $scheduleDays !== '' || $scheduleHours !== '' || $scheduleDays2 !== '' || $scheduleHours2 !== '';
+                if ($hasSchedule):
+                ?>
                 <div class="col-lg-3 col-md-4">
-                    <h5 class="h6 fw-semibold mb-4"><?php echo htmlspecialchars(getContent($footerContent, 'schedule.title', 'Horario')); ?></h5>
+                    <h5 class="h6 fw-semibold mb-4"><?php echo htmlspecialchars($scheduleTitle !== '' ? $scheduleTitle : 'Horario'); ?></h5>
                     <ul class="list-unstyled">
-                        <li class="mb-2 small text-white-50"><?php echo htmlspecialchars(getContent($footerContent, 'schedule.weekdays.days', '')); ?></li>
-                        <li class="mb-2 small text-white-50"><?php echo htmlspecialchars(getContent($footerContent, 'schedule.weekdays.hours', '')); ?></li>
+                        <?php if ($scheduleDays !== '' || $scheduleHours !== ''): ?>
+                        <li class="mb-2 small text-white-50"><?php echo htmlspecialchars($scheduleDays); ?></li>
+                        <li class="mb-2 small text-white-50"><?php echo htmlspecialchars($scheduleHours); ?></li>
+                        <?php endif; ?>
+                        <?php if ($scheduleDays2 !== '' || $scheduleHours2 !== ''): ?>
+                        <li class="mb-2 small text-white-50"><?php echo htmlspecialchars($scheduleDays2); ?></li>
+                        <li class="mb-2 small text-white-50"><?php echo htmlspecialchars($scheduleHours2); ?></li>
+                        <?php endif; ?>
                     </ul>
                 </div>
+                <?php endif; ?>
             </div>
             
             <div class="border-top border-white border-opacity-10 pt-4 mt-5 text-center">

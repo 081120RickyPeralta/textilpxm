@@ -55,6 +55,10 @@ class SiteContent extends Model {
                         'days' => $get('footer_schedule_days'),
                         'hours' => $get('footer_schedule_hours'),
                     ],
+                    'extra' => [
+                        'days' => $get('footer_schedule_days_2'),
+                        'hours' => $get('footer_schedule_hours_2'),
+                    ],
                 ],
                 'social' => [
                     'facebook' => $get('footer_social_facebook'),
@@ -69,7 +73,6 @@ class SiteContent extends Model {
             'meta' => [
                 'site' => [
                     'name' => $get('meta_site_name'),
-                    'default_title' => $get('meta_site_default_title'),
                     'description' => $get('meta_site_description'),
                     'location' => $get('meta_site_location'),
                 ],

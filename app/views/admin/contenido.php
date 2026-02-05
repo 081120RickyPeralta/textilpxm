@@ -20,19 +20,27 @@ $v = function($key) use ($c) { return htmlspecialchars($c[$key] ?? '', ENT_QUOTE
 
     <div class="card-body p-4">
         <form method="post" action="<?php echo BASE_URL; ?>/admin/contenido/guardar">
-            <!-- 1. Menú superior (como en la página: lo primero que se ve) -->
-            <fieldset class="mb-4">
-                <legend class="h6 border-bottom pb-2">1. Menú superior (encabezado)</legend>
+            <ul class="nav nav-tabs mb-3" id="contenidoTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="tab-3-btn" data-bs-toggle="tab" data-bs-target="#tab-3" type="button" role="tab" aria-selected="true">Título y descripción del sitio (pestaña y buscadores)</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="tab-1-btn" data-bs-toggle="tab" data-bs-target="#tab-1" type="button" role="tab">Encabezado</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="tab-2-btn" data-bs-toggle="tab" data-bs-target="#tab-2" type="button" role="tab">Quiénes somos</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="tab-4-btn" data-bs-toggle="tab" data-bs-target="#tab-4" type="button" role="tab">Pie de página</button>
+                </li>
+            </ul>
+            <div class="tab-content" id="contenidoTabsContent">
+                <div class="tab-pane fade" id="tab-1" role="tabpanel">
                 <div class="mb-3">
                     <label for="navbar_brand" class="form-label">Nombre de la marca que se ve arriba</label>
                     <input type="text" class="form-control" id="navbar_brand" name="navbar_brand" value="<?php echo $v('navbar_brand'); ?>">
                 </div>
-            </fieldset>
-
-            <!-- 2. Contenido de la página de inicio (hero → productos → nosotros) -->
-            <fieldset class="mb-4">
-                <legend class="h6 border-bottom pb-2">2. Contenido de la página de inicio</legend>
-                <h6 class="text-muted">Banner principal (lo primero que ve el visitante)</h6>
+                <h4 class="text-muted">Banner principal (lo primero que ve el visitante)</h4>
                 <div class="mb-3">
                     <label for="home_hero_location" class="form-label">Lugar que se muestra</label>
                     <input type="text" class="form-control" id="home_hero_location" name="home_hero_location" value="<?php echo $v('home_hero_location'); ?>">
@@ -45,7 +53,7 @@ $v = function($key) use ($c) { return htmlspecialchars($c[$key] ?? '', ENT_QUOTE
                     <label for="home_hero_description" class="form-label">Texto descriptivo del banner</label>
                     <textarea class="form-control" id="home_hero_description" name="home_hero_description" rows="2"><?php echo $v('home_hero_description'); ?></textarea>
                 </div>
-                <h6 class="text-muted mt-3">Sección de productos</h6>
+                <h4 class="text-muted mt-3">Sección de productos</h4>
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="home_collection_title" class="form-label">Título de la sección de productos</label>
@@ -62,7 +70,11 @@ $v = function($key) use ($c) { return htmlspecialchars($c[$key] ?? '', ENT_QUOTE
                         <input type="text" class="form-control" id="home_collection_no_products" name="home_collection_no_products" value="<?php echo $v('home_collection_no_products'); ?>">
                     </div>
                 </div>
-                <h6 class="text-muted mt-3">Sección «Nosotros» o «Quiénes somos»</h6>
+                </div>
+
+                <div class="tab-pane fade" id="tab-2" role="tabpanel">
+                
+                <h4 class="text-muted mt-3">Sección «Nosotros» o «Quiénes somos»</h4>
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="home_about_badge" class="form-label">Texto pequeño arriba (ej. «Nuestra historia»)</label>
@@ -81,7 +93,7 @@ $v = function($key) use ($c) { return htmlspecialchars($c[$key] ?? '', ENT_QUOTE
                     <label for="home_about_description2" class="form-label">Segundo párrafo</label>
                     <textarea class="form-control" id="home_about_description2" name="home_about_description2" rows="2"><?php echo $v('home_about_description2'); ?></textarea>
                 </div>
-                <h6 class="text-muted mt-2">Números o datos destacados (ej. años de experiencia, países)</h6>
+                <h4 class="text-muted mt-2">Números o datos destacados (ej. años de experiencia, países)</h4>
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label for="home_about_stats_years_value" class="form-label">Primer número (ej. 15+)</label>
@@ -112,18 +124,12 @@ $v = function($key) use ($c) { return htmlspecialchars($c[$key] ?? '', ENT_QUOTE
                         <input type="text" class="form-control" id="home_about_stats_products_label" name="home_about_stats_products_label" value="<?php echo $v('home_about_stats_products_label'); ?>">
                     </div>
                 </div>
-            </fieldset>
+                </div>
 
-            <!-- 3. Título y descripción (pestaña y buscadores) -->
-            <fieldset class="mb-4">
-                <legend class="h6 border-bottom pb-2">3. Título y descripción del sitio (pestaña del navegador y buscadores)</legend>
+                <div class="tab-pane fade show active" id="tab-3" role="tabpanel">
                 <div class="mb-3">
                     <label for="meta_site_name" class="form-label">Nombre de tu negocio o sitio</label>
                     <input type="text" class="form-control" id="meta_site_name" name="meta_site_name" value="<?php echo $v('meta_site_name'); ?>">
-                </div>
-                <div class="mb-3">
-                    <label for="meta_site_default_title" class="form-label">Texto que aparece en la pestaña del navegador</label>
-                    <input type="text" class="form-control" id="meta_site_default_title" name="meta_site_default_title" value="<?php echo $v('meta_site_default_title'); ?>">
                 </div>
                 <div class="mb-3">
                     <label for="meta_site_description" class="form-label">Descripción breve (la usan Google y otros buscadores)</label>
@@ -133,11 +139,9 @@ $v = function($key) use ($c) { return htmlspecialchars($c[$key] ?? '', ENT_QUOTE
                     <label for="meta_site_location" class="form-label">Lugar donde están (ciudad, estado)</label>
                     <input type="text" class="form-control" id="meta_site_location" name="meta_site_location" value="<?php echo $v('meta_site_location'); ?>">
                 </div>
-            </fieldset>
+                </div>
 
-            <!-- 4. Pie de página (al final de la página) -->
-            <fieldset class="mb-4">
-                <legend class="h6 border-bottom pb-2">4. Pie de página</legend>
+                <div class="tab-pane fade" id="tab-4" role="tabpanel">
                 <div class="mb-3">
                     <label for="footer_brand" class="form-label">Nombre de la marca en el pie de página</label>
                     <input type="text" class="form-control" id="footer_brand" name="footer_brand" value="<?php echo $v('footer_brand'); ?>">
@@ -146,7 +150,7 @@ $v = function($key) use ($c) { return htmlspecialchars($c[$key] ?? '', ENT_QUOTE
                     <label for="footer_description" class="form-label">Breve descripción de tu negocio</label>
                     <textarea class="form-control" id="footer_description" name="footer_description" rows="2"><?php echo $v('footer_description'); ?></textarea>
                 </div>
-                <h6 class="text-muted mt-3">Datos de contacto</h6>
+                <h4 class="text-muted mt-3">Datos de contacto</h4>
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="footer_contact_title" class="form-label">Título de la sección (ej. «Contacto»)</label>
@@ -155,7 +159,7 @@ $v = function($key) use ($c) { return htmlspecialchars($c[$key] ?? '', ENT_QUOTE
                 </div>
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="footer_contact_street" class="form-label">Calle y número</label>
+                        <label for="footer_contact_street" class="form-label">Dirección</label>
                         <input type="text" class="form-control" id="footer_contact_street" name="footer_contact_street" value="<?php echo $v('footer_contact_street'); ?>">
                     </div>
                     <div class="col-md-6 mb-3">
@@ -173,7 +177,7 @@ $v = function($key) use ($c) { return htmlspecialchars($c[$key] ?? '', ENT_QUOTE
                         <input type="email" class="form-control" id="footer_contact_email" name="footer_contact_email" value="<?php echo $v('footer_contact_email'); ?>">
                     </div>
                 </div>
-                <h6 class="text-muted mt-3">Horario de atención</h6>
+                <h4 class="text-muted mt-3">Horario de atención</h4>
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label for="footer_schedule_title" class="form-label">Título (ej. «Horario»)</label>
@@ -188,7 +192,18 @@ $v = function($key) use ($c) { return htmlspecialchars($c[$key] ?? '', ENT_QUOTE
                         <input type="text" class="form-control" id="footer_schedule_hours" name="footer_schedule_hours" value="<?php echo $v('footer_schedule_hours'); ?>" placeholder="Ej: 10:00 AM - 7:00 PM">
                     </div>
                 </div>
-                <h6 class="text-muted mt-3">Enlaces a redes sociales</h6>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="footer_schedule_days_2" class="form-label">Días adicionales (opcional)</label>
+                        <input type="text" class="form-control" id="footer_schedule_days_2" name="footer_schedule_days_2" value="<?php echo $v('footer_schedule_days_2'); ?>" placeholder="Ej: Entre semana">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="footer_schedule_hours_2" class="form-label">Horario adicional (opcional)</label>
+                        <input type="text" class="form-control" id="footer_schedule_hours_2" name="footer_schedule_hours_2" value="<?php echo $v('footer_schedule_hours_2'); ?>" placeholder="Ej: 9:00 AM - 2:00 PM">
+                    </div>
+                </div>
+                <small class="text-muted d-block mb-2">Si dejas vacíos días y horario adicionales, no se mostrarán en el footer.</small>
+                <h4 class="text-muted mt-3">Enlaces a redes sociales</h4>
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label for="footer_social_facebook" class="form-label">Enlace de Facebook</label>
@@ -204,7 +219,7 @@ $v = function($key) use ($c) { return htmlspecialchars($c[$key] ?? '', ENT_QUOTE
                         <small class="text-muted">Solo el número, con código de país, sin espacios ni símbolos.</small>
                     </div>
                 </div>
-                <h6 class="text-muted mt-3">Texto al final del sitio</h6>
+                <h4 class="text-muted mt-3">Texto al final del sitio</h4>
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="footer_copyright_text" class="form-label">Frase de derechos reservados</label>
@@ -215,9 +230,10 @@ $v = function($key) use ($c) { return htmlspecialchars($c[$key] ?? '', ENT_QUOTE
                         <input type="text" class="form-control" id="footer_copyright_made_with" name="footer_copyright_made_with" value="<?php echo $v('footer_copyright_made_with'); ?>">
                     </div>
                 </div>
-            </fieldset>
+                </div>
+            </div>
 
-            <div class="d-flex gap-2">
+            <div class="d-flex gap-2 mt-3">
                 <button type="submit" class="btn btn-success">Guardar cambios</button>
                 <a href="<?php echo BASE_URL; ?>/admin" class="btn btn-outline-secondary">Volver a productos</a>
             </div>
