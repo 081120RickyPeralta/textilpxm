@@ -1,24 +1,24 @@
 <?php
 /**
  * index.php - Redirección desde la raíz del proyecto
- * Redirige a /public/#inicio
+ * Redirige a public/ (o public/admin, etc.) usando ruta relativa para evitar
+ * que SCRIPT_NAME sea ruta de disco (ej. C:/xampp/htdocs/...) y rompa la URL.
  */
+$requestUri = $_SERVER['REQUEST_URI'] ?? '/';
+$requestUri = strtok($requestUri, '?');
+$requestUri = trim($requestUri, '/');
 
-// Obtener el protocolo (http o https)
-$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+// Quitar el segmento "textilpxm" si está al inicio (ruta base del proyecto en la URL)
+$parts = explode('/', $requestUri);
+if ($parts[0] === 'textilpxm') {
+    array_shift($parts);
+}
+$path = implode('/', $parts);
+if ($path === '' || $path === 'index.php') {
+    $path = '';
+} else {
+    $path = '/' . $path;
+}
 
-// Obtener el host
-$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-
-// Obtener la ruta base del proyecto
-$scriptPath = dirname($_SERVER['SCRIPT_NAME']);
-
-// Construir la URL base
-$baseUrl = $protocol . '://' . $host . $scriptPath;
-
-// Eliminar la barra final si existe
-$baseUrl = rtrim($baseUrl, '/');
-
-// Redirigir a /public/#inicio
-header("Location: " . $baseUrl . "/public");
+header('Location: public' . $path);
 exit;

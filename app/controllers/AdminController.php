@@ -8,11 +8,13 @@
 class AdminController extends Controller {
     private $userModel;
     private $productModel;
+    private $siteContentModel;
 
     public function __construct() {
         parent::__construct();
         $this->userModel = new User();
         $this->productModel = new Product();
+        $this->siteContentModel = new SiteContent();
     }
 
     /**
@@ -33,31 +35,39 @@ class AdminController extends Controller {
     }
 
     /**
-     * Login solo para administradores
+     * Login solo para administradores.
+     * GET /admin/login → redirige a /admin (el login se muestra allí).
+     * POST /admin/login → procesa el formulario de login.
      */
     public function login() {
         if (($this->isAuthenticated()) && ($_SESSION['user_rol'] ?? '') === 'admin') {
             $this->redirect(BASE_URL . '/admin');
             return;
         }
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: ' . BASE_URL . '/admin');
+            exit;
+        }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = trim($_POST['email'] ?? '');
             $password = $_POST['password'] ?? '';
-            $remember = isset($_POST['remember']);
 
             if ($email === '' || $password === '') {
-                $this->render('admin/login', ['error' => 'Completa email y contraseña.', 'page_title' => 'Admin Login'], 'admin');
+                $_SESSION['flash_email'] = $email;
+                $this->redirectWithMessage('/admin', 'Completa email y contraseña.', 'danger');
                 return;
             }
 
             $user = $this->userModel->login($email, $password);
             if (!$user) {
-                $this->render('admin/login', ['error' => 'Credenciales incorrectas.', 'page_title' => 'Admin Login'], 'admin');
+                $_SESSION['flash_email'] = $email;
+                $this->redirectWithMessage('/admin', 'Credenciales incorrectas.', 'danger');
                 return;
             }
             if (($user['rol'] ?? '') !== 'admin') {
-                $this->render('admin/login', ['error' => 'Acceso denegado. Solo administradores.', 'page_title' => 'Admin Login'], 'admin');
+                $_SESSION['flash_email'] = $email;
+                $this->redirectWithMessage('/admin', 'Acceso denegado. Solo administradores.', 'danger');
                 return;
             }
 
@@ -65,13 +75,6 @@ class AdminController extends Controller {
             $_SESSION['user_name'] = $user['nombre'];
             $_SESSION['user_email'] = $user['email'];
             $_SESSION['user_rol'] = $user['rol'];
-
-            if ($remember && defined('REMEMBER_ME_COOKIE') && defined('REMEMBER_ME_SECRET') && defined('REMEMBER_ME_DAYS')) {
-                $expiry = time() + (REMEMBER_ME_DAYS * 86400);
-                $mac = hash_hmac('sha256', $user['id'] . '|' . $expiry, REMEMBER_ME_SECRET);
-                $value = $user['id'] . '|' . $expiry . '|' . $mac;
-                setcookie(REMEMBER_ME_COOKIE, $value, $expiry, '/', '', false, true);
-            }
 
             $path = $_SESSION['admin_redirect'] ?? '/admin';
             unset($_SESSION['admin_redirect']);
@@ -83,23 +86,35 @@ class AdminController extends Controller {
     }
 
     /**
-     * Cerrar sesión y eliminar cookie recordarme
+     * Cerrar sesión
      */
     public function logout() {
-        if (defined('REMEMBER_ME_COOKIE')) {
-            setcookie(REMEMBER_ME_COOKIE, '', time() - 3600, '/', '', false, true);
-        }
         session_unset();
         session_destroy();
-        header('Location: ' . BASE_URL . '/admin/login');
+        header('Location: ' . BASE_URL . '/admin');
         exit;
     }
 
     /**
-     * Listado de productos (CRUD)
+     * GET /admin: si no está logueado como admin → mostrar login aquí (misma URL).
+     * Si está logueado → listado de productos (sitio de administración).
      */
     public function index() {
-        $this->requireAdmin();
+        $isAdmin = !empty($_SESSION['user_id']) && ($_SESSION['user_rol'] ?? '') === 'admin';
+        if (!$isAdmin) {
+            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                $flash = $this->getFlashMessage();
+                $error = ($flash && ($flash['type'] ?? '') === 'danger') ? ($flash['message'] ?? '') : null;
+                $email = $_SESSION['flash_email'] ?? '';
+                if (isset($_SESSION['flash_email'])) {
+                    unset($_SESSION['flash_email']);
+                }
+                $this->render('admin/login', ['page_title' => 'Admin Login', 'error' => $error, 'email' => $email], 'admin');
+                return;
+            }
+            header('Location: ' . BASE_URL . '/admin');
+            exit;
+        }
         $products = $this->productModel->getAll();
         $flash = $this->getFlashMessage();
         $data = [
@@ -252,6 +267,121 @@ class AdminController extends Controller {
         } catch (Exception $e) {
             $this->redirectWithMessage('/admin/editar/' . $id, 'Error: ' . $e->getMessage(), 'danger');
         }
+    }
+
+    /**
+     * Formulario de contenido del sitio (navbar, footer, meta, home)
+     * GET: mostrar formulario; POST a /admin/contenido/guardar: guardar
+     */
+    public function contenido($action = null) {
+        $this->requireAdmin();
+
+        if ($action === 'guardar' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            $keys = [
+                'navbar_brand', 'footer_brand', 'footer_description',
+                'footer_contact_title', 'footer_contact_street', 'footer_contact_city', 'footer_contact_phone', 'footer_contact_email',
+                'footer_schedule_title', 'footer_schedule_days', 'footer_schedule_hours',
+                'footer_social_facebook', 'footer_social_instagram', 'footer_social_whatsapp',
+                'footer_copyright_text', 'footer_copyright_made_with',
+                'meta_site_name', 'meta_site_default_title', 'meta_site_description', 'meta_site_location',
+                'home_hero_location', 'home_hero_title', 'home_hero_description',
+                'home_collection_title', 'home_collection_description', 'home_collection_no_products',
+                'home_about_badge', 'home_about_title', 'home_about_description1', 'home_about_description2',
+                'home_about_stats_years_value', 'home_about_stats_years_label',
+                'home_about_stats_countrys_value', 'home_about_stats_countrys_label',
+                'home_about_stats_products_value', 'home_about_stats_products_label',
+            ];
+            foreach ($keys as $key) {
+                if ($key === 'footer_social_whatsapp') {
+                    $number = trim($_POST['footer_social_whatsapp_number'] ?? '');
+                    $value = SiteContent::numberToWhatsAppUrl($number);
+                } else {
+                    $value = trim($_POST[$key] ?? '');
+                }
+                $this->siteContentModel->set($key, $value);
+            }
+            $this->redirectWithMessage('/admin/contenido', 'Contenido guardado correctamente', 'success');
+            return;
+        }
+
+        try {
+            $flat = $this->siteContentModel->getAll();
+        } catch (Throwable $e) {
+            $flat = [];
+        }
+        if (empty($flat)) {
+            $flat = $this->getDefaultContentFlat();
+        }
+        $whatsappUrl = $flat['footer_social_whatsapp'] ?? '';
+        $flash = $this->getFlashMessage();
+        $data = [
+            'page_title' => 'Contenido del sitio',
+            'content' => $flat,
+            'whatsapp_number' => SiteContent::whatsappUrlToNumber($whatsappUrl),
+            'flash_message' => $flash['message'] ?? null,
+            'flash_type' => $flash['type'] ?? null,
+        ];
+        $this->render('admin/contenido', $data, 'admin');
+    }
+
+    /**
+     * Valores por defecto desde content_data.php (si la tabla está vacía)
+     */
+    private function getDefaultContentFlat() {
+        $file = APP_PATH . '/content_data.php';
+        if (!file_exists($file)) {
+            return [];
+        }
+        $data = require $file;
+        $flat = [];
+        if (!empty($data['navbar']['brand'])) {
+            $flat['navbar_brand'] = $data['navbar']['brand'];
+        }
+        if (!empty($data['footer'])) {
+            $f = $data['footer'];
+            $flat['footer_brand'] = $f['brand'] ?? '';
+            $flat['footer_description'] = $f['description'] ?? '';
+            $flat['footer_contact_title'] = $f['contact']['title'] ?? '';
+            $flat['footer_contact_street'] = $f['contact']['address']['street'] ?? '';
+            $flat['footer_contact_city'] = $f['contact']['address']['city'] ?? '';
+            $flat['footer_contact_phone'] = $f['contact']['phone'] ?? '';
+            $flat['footer_contact_email'] = $f['contact']['email'] ?? '';
+            $flat['footer_schedule_title'] = $f['schedule']['title'] ?? '';
+            $flat['footer_schedule_days'] = $f['schedule']['weekdays']['days'] ?? '';
+            $flat['footer_schedule_hours'] = $f['schedule']['weekdays']['hours'] ?? '';
+            $flat['footer_social_facebook'] = $f['social']['facebook'] ?? '';
+            $flat['footer_social_instagram'] = $f['social']['instagram'] ?? '';
+            $flat['footer_social_whatsapp'] = $f['social']['whatsapp'] ?? '';
+            $flat['footer_copyright_text'] = $f['copyright']['text'] ?? '';
+            $flat['footer_copyright_made_with'] = $f['copyright']['made_with'] ?? '';
+        }
+        if (!empty($data['meta']['site'])) {
+            $s = $data['meta']['site'];
+            $flat['meta_site_name'] = $s['name'] ?? '';
+            $flat['meta_site_default_title'] = $s['default_title'] ?? '';
+            $flat['meta_site_description'] = $s['description'] ?? '';
+            $flat['meta_site_location'] = $s['location'] ?? '';
+        }
+        if (!empty($data['home'])) {
+            $h = $data['home'];
+            $flat['home_hero_location'] = $h['hero']['location'] ?? '';
+            $flat['home_hero_title'] = $h['hero']['title'] ?? '';
+            $flat['home_hero_description'] = $h['hero']['description'] ?? '';
+            $flat['home_collection_title'] = $h['collection']['title'] ?? '';
+            $flat['home_collection_description'] = $h['collection']['description'] ?? '';
+            $flat['home_collection_no_products'] = $h['collection']['no_products'] ?? '';
+            $flat['home_about_badge'] = $h['about']['badge'] ?? '';
+            $flat['home_about_title'] = $h['about']['title'] ?? '';
+            $flat['home_about_description1'] = $h['about']['description1'] ?? '';
+            $flat['home_about_description2'] = $h['about']['description2'] ?? '';
+            $flat['home_about_stats_years_value'] = $h['about']['stats']['years']['value'] ?? '';
+            $flat['home_about_stats_years_label'] = $h['about']['stats']['years']['label'] ?? '';
+            $flat['home_about_stats_countrys_value'] = $h['about']['stats']['countrys']['value'] ?? '';
+            $flat['home_about_stats_countrys_label'] = $h['about']['stats']['countrys']['label'] ?? '';
+            $flat['home_about_stats_products_value'] = $h['about']['stats']['products']['value'] ?? '';
+            $flat['home_about_stats_products_label'] = $h['about']['stats']['products']['label'] ?? '';
+        }
+        return $flat;
     }
 
     /**

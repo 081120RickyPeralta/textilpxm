@@ -34,6 +34,9 @@ $admin_is_logged = !empty($_SESSION['user_id']) && ($_SESSION['user_rol'] ?? '')
                     <li class="nav-item">
                         <a class="nav-link" href="<?php echo BASE_URL; ?>/admin/crear"><i class="bi bi-plus-lg me-1"></i>Nuevo producto</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo BASE_URL; ?>/admin/contenido"><i class="bi bi-pencil-square me-1"></i>Contenido del sitio</a>
+                    </li>
                 </ul>
                 <div class="d-flex align-items-center gap-2">
                     <span class="text-white-50 small"><?php echo htmlspecialchars($admin_user_name); ?></span>

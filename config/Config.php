@@ -16,20 +16,26 @@ define('PUBLIC_PATH', ROOT_PATH . '/public');
 define('DATA_PATH', ROOT_PATH . '/data');
 
 // Configuración de URLs - Detección automática
-// Obtener el protocolo (http o https)
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-
-// Obtener el host
 $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
 
-// Obtener la ruta del script actual (index.php)
-$scriptPath = dirname($_SERVER['SCRIPT_NAME']);
-
-// Construir BASE_URL automáticamente
-$baseUrl = $protocol . '://' . $host . $scriptPath;
-
-// Eliminar la barra final si existe
+$scriptPath = dirname($_SERVER['SCRIPT_NAME'] ?? '');
+// En XAMPP/Windows a veces SCRIPT_NAME es ruta de disco (C:/xampp/htdocs/...), lo que rompe BASE_URL
+$isFilesystemPath = (strpos($scriptPath, ':') !== false || strpos($scriptPath, '\\') !== false);
+if ($isFilesystemPath && !empty($_SERVER['DOCUMENT_ROOT']) && !empty($_SERVER['SCRIPT_FILENAME'])) {
+    $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_FILENAME']));
+    $docRoot = str_replace('\\', '/', rtrim($_SERVER['DOCUMENT_ROOT'], '/\\'));
+    $basePath = ($docRoot !== '' && strpos($scriptDir, $docRoot) === 0)
+        ? substr($scriptDir, strlen($docRoot))
+        : '/' . basename($scriptDir);
+    $basePath = '/' . trim(str_replace('\\', '/', $basePath), '/');
+    $baseUrl = $protocol . '://' . $host . $basePath;
+} else {
+    $baseUrl = $protocol . '://' . $host . $scriptPath;
+}
 $baseUrl = rtrim($baseUrl, '/');
+// Quitar /public de la URL para que los enlaces sean sin "public" (ej. /textilpxm/admin)
+$baseUrl = preg_replace('#/public$#', '', $baseUrl);
 
 define('BASE_URL', $baseUrl);
 define('ASSETS_URL', BASE_URL);
@@ -48,11 +54,6 @@ define('SITE_EMAIL', 'info@textilpxm.com');
 // Configuración de la sesión
 define('SESSION_NAME', 'TEXTILPXM_SESSION');
 define('SESSION_LIFETIME', 86400); // 24 horas
-
-// Cookie "Recordarme" para administradores (solo /admin)
-define('REMEMBER_ME_COOKIE', 'TEXTILPXM_ADMIN_REMEMBER');
-define('REMEMBER_ME_SECRET', 'textilpxm_remember_secret_' . PROJECT_NAME);
-define('REMEMBER_ME_DAYS', 14);
 
 // Configuración de errores (descomentar en desarrollo)
 ini_set('display_errors', 1);
@@ -86,8 +87,3 @@ spl_autoload_register(function($class) {
         }
     }
 });
-
-// Restaurar sesión de admin desde cookie "recordarme"
-if (empty($_SESSION['user_id']) && !empty($_COOKIE[REMEMBER_ME_COOKIE])) {
-    restoreAdminSessionFromCookie();
-}

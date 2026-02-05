@@ -1,0 +1,8 @@
+# URLs sin "public": reescribir internamente a public/ (la barra de direcciones no cambia)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Recursos estáticos: servir desde public/ (css, js, imágenes, fuentes)
+    RewriteRule ^(css/.*|js/.*|.*\.(css|js|jpg|jpeg|png|gif|ico|svg|woff|woff2|ttf|eot))$ public/$1 [L]
+    # El resto: front controller en public
+    RewriteRule ^(.*)$ public/index.php?path=$1 [L,QSA]
+</IfModule>

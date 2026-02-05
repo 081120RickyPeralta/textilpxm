@@ -65,7 +65,7 @@ $homeContent = loadContent('home');
             <p class="lead mb-4 opacity-75 lh-lg">
                 <?php echo htmlspecialchars(getContent($homeContent, 'hero.description', '')); ?>
             </p>
-            <a href="#coleccion" class="btn btn-warning px-4 py-2 small mb-4"><?php echo htmlspecialchars(getContent($homeContent, 'hero.cta', 'Explorar Colección')); ?></a>
+            <a href="#coleccion" class="btn btn-warning px-4 py-2 small mb-4">Explorar Colección</a>
         </div>
     </div>
 </section>
@@ -75,7 +75,7 @@ $homeContent = loadContent('home');
     <div class="container">
         <div class="row mb-5">
             <div class="col-lg-6">
-                <p class="small text-uppercase mb-2 text-success"><?php echo htmlspecialchars(getContent($homeContent, 'collection.badge', 'Nuestra Colección')); ?></p>
+                <p class="small text-uppercase mb-2 text-success">Nuestra Colección</p>
                 <h2 class="display-4 fw-normal mb-3"><?php echo htmlspecialchars(getContent($homeContent, 'collection.title', 'Prendas Artesanales')); ?></h2>
                 <p class="text-muted" style="max-width: 500px;">
                     <?php echo htmlspecialchars(getContent($homeContent, 'collection.description', '')); ?>
@@ -83,7 +83,7 @@ $homeContent = loadContent('home');
             </div>
             <div class="col-lg-6 text-lg-end d-flex align-items-center justify-content-lg-end">
                 <a href="<?php echo BASE_URL; ?>/categorias" class="btn btn-success px-4 py-2">
-                    <i class="bi bi-grid me-2"></i><?php echo htmlspecialchars(getContent($homeContent, 'collection.cta', 'Ver Todas las Categorías')); ?>
+                    <i class="bi bi-grid me-2"></i>Ver Todas las Categorías
                 </a>
             </div>
         </div>
