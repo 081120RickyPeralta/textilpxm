@@ -173,12 +173,6 @@ $debugInfo = [
             <div class="alert alert-warning text-center">
                 <p class="mb-0">
                     No se encontraron categorías. 
-                    <?php if (empty($categoryNames)): ?>
-                        <br><small>categoryNames está vacío</small>
-                    <?php endif; ?>
-                    <?php if (empty($productsByCategory)): ?>
-                        <br><small>productsByCategory está vacío</small>
-                    <?php endif; ?>
                 </p>
             </div>
         <?php endif; ?>
